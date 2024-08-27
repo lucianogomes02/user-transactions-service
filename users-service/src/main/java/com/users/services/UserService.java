@@ -1,4 +1,4 @@
-package com.users.service;
+package com.users.services;
 
 import com.users.domain.aggregate.User;
 import com.users.domain.value_objects.UserPublicDto;
