@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String password;
     private String cpf;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
     private boolean isActive = true;
 }
