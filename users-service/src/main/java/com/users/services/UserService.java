@@ -28,6 +28,7 @@ public class UserService {
             user.getName(),
             user.getEmail(),
             user.getCpf(),
+            user.getWalletFunds().toString(),
             user.getCreatedAt().toString(),
             user.getUpdatedAt().toString()
         );
@@ -40,6 +41,7 @@ public class UserService {
                 user.getName(),
                 user.getEmail(),
                 user.getCpf(),
+                user.getWalletFunds().toString(),
                 user.getCreatedAt().toString(),
                 user.getUpdatedAt().toString()
             ))

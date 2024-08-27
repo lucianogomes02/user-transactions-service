@@ -21,6 +21,7 @@ public class User {
     private String email;
     private String password;
     private String cpf;
+    private Double walletFunds = 0.00;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
     private boolean isActive = true;
