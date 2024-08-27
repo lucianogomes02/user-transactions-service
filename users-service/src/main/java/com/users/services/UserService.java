@@ -4,6 +4,7 @@ import com.users.domain.aggregate.User;
 import com.users.domain.value_objects.UserPublicDto;
 import com.users.domain.value_objects.UserRecordDto;
 import com.users.domain.value_objects.UserTransactionDto;
+import com.users.producers.UserProducer;
 import com.users.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserProducer userProducer;
 
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
@@ -37,7 +41,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserTransactionDto updateWalletFunds(UserTransactionDto userTransactionDto) {
+    public void updateWalletFunds(UserTransactionDto userTransactionDto) {
         var senderUser = userRepository.findById(UUID.fromString(userTransactionDto.senderId()));
         var receiverUser = userRepository.findById(UUID.fromString(userTransactionDto.receiverId()));
 
@@ -52,9 +56,7 @@ public class UserService {
                 userRepository.save(receiver);
             }
 
-            return userTransactionDto;
-        } else {
-            return null;
+            userProducer.pulishUserTransactionMessage(userTransactionDto);
         }
     }
 

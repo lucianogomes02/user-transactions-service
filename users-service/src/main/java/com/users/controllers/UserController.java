@@ -22,15 +22,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PutMapping("/users/wallet")
-    public ResponseEntity<UserTransactionDto> updateWalletFunds(@RequestBody @Valid UserTransactionDto userTransactionDto) {
-        UserTransactionDto updatedUser = userService.updateWalletFunds(userTransactionDto);
-        if (updatedUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedUser);
-    }
-
     @GetMapping("/users")
     public ResponseEntity<Iterable<UserPublicDto>> getAllUsers() {
         Iterable<UserPublicDto> users = userService.getAllUsers();

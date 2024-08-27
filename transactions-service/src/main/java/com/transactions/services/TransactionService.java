@@ -25,7 +25,7 @@ public class TransactionService {
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
         var transaction = new Transaction();
         BeanUtils.copyProperties(transactionRecordDto, transaction);
-        transactionProducer.publicTransactionMessage(transactionRecordDto);
+        transactionProducer.publishTransactionMessage(transactionRecordDto);
         transaction = transactionRepository.save(transaction);
         return new TransactionPublicDto(
             transaction.getId().toString(),

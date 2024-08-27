@@ -15,7 +15,7 @@ public class TransactionProducer {
     @Value(value = "${broker.queue.transaction.to.user}")
     private String routingKey;
 
-    public void publicTransactionMessage(TransactionRecordDto transactionRecordDto) {
+    public void publishTransactionMessage(TransactionRecordDto transactionRecordDto) {
         rabbitTemplate.convertAndSend("", routingKey, transactionRecordDto);
     }
 }
