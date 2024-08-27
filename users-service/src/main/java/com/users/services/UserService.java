@@ -6,6 +6,7 @@ import com.users.domain.value_objects.UserRecordDto;
 import com.users.domain.value_objects.UserTransactionDto;
 import com.users.producers.UserProducer;
 import com.users.repositories.UserRepository;
+import com.users.services.validators.UserValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,14 @@ public class UserService {
     @Autowired
     private UserProducer userProducer;
 
+    @Autowired
+    private UserValidator userValidator;
+
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
         var user = new User();
         BeanUtils.copyProperties(userRecordDto, user);
+        userValidator.validate(user);
         user = userRepository.save(user);
         return new UserPublicDto(
             user.getId().toString(),

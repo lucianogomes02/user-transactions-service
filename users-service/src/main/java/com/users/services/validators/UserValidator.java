@@ -3,12 +3,17 @@ package com.users.services.validators;
 import com.users.application.exceptions.UserValidationException;
 import com.users.domain.aggregate.User;
 import com.users.domain.specifications.Specification;
+import com.users.domain.specifications.user.CPFIsUnique;
+import com.users.domain.specifications.user.CPFIsValid;
+import com.users.domain.specifications.user.EmailIsUnique;
+import com.users.domain.specifications.user.EmailIsValid;
 import com.users.domain.strategies.*;
 import com.users.domain.strategies.user.CPFIsNotUnique;
 import com.users.domain.strategies.user.CPFIsNotValid;
 import com.users.domain.strategies.user.EmailIsNotUnique;
 import com.users.domain.strategies.user.EmailIsNotValid;
 import com.users.repositories.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +22,18 @@ import java.util.Objects;
 
 @Component
 public class UserValidator implements Validator<User>{
-    private final List<Specification<User>> userSpecifications;
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    public UserValidator(List<Specification<User>> userSpecifications) {
-        this.userSpecifications = userSpecifications;
+    private List<Specification<User>> userSpecifications;
+
+    @PostConstruct
+    public void initSpecifications() {
+        userSpecifications.add(new CPFIsUnique());
+        userSpecifications.add(new CPFIsValid());
+        userSpecifications.add(new EmailIsValid());
+        userSpecifications.add(new EmailIsUnique());
     }
 
     @Override
