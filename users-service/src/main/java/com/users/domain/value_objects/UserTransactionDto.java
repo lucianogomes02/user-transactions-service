@@ -4,12 +4,21 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserTransactionDto(
         @NotBlank
+        String id,
+
+        @NotBlank
         String senderId,
 
         @NotBlank
         String receiverId,
 
         @NotBlank
-        Double amount
+        Double amount,
+
+        @NotBlank
+        String status,
+
+        @NotBlank
+        String createdAt
 ) {
 }

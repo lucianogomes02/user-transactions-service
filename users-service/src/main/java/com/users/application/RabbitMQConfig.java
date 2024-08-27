@@ -1,4 +1,4 @@
-package com.transactions.application;
+package com.users.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Queue;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${broker.queue.transaction.name}")
+    @Value("${broker.queue.user.name}")
     private String queue;
 
     @Bean

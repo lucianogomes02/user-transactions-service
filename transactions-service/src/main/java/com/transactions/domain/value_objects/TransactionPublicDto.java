@@ -5,6 +5,7 @@ public record TransactionPublicDto(
     String senderId,
     String receiverId,
     String amount,
+    String status,
     String createdAt
 ) {
 }
