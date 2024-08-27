@@ -3,6 +3,7 @@ package com.transactions.services;
 import com.transactions.domain.aggregate.Transaction;
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionRecordDto;
+import com.transactions.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -17,10 +18,14 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private TransactionProducer transactionProducer;
+
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
         var transaction = new Transaction();
         BeanUtils.copyProperties(transactionRecordDto, transaction);
+        transactionProducer.publicTransactionMessage(transactionRecordDto);
         transaction = transactionRepository.save(transaction);
         return new TransactionPublicDto(
             transaction.getId().toString(),
