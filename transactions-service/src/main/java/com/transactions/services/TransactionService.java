@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +25,9 @@ public class TransactionService {
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
         var transaction = new Transaction();
-        BeanUtils.copyProperties(transactionRecordDto, transaction);
+        transaction.setSenderId(UUID.fromString(transactionRecordDto.senderId()));
+        transaction.setReceiverId(UUID.fromString(transactionRecordDto.receiverId()));
+        transaction.setAmount(Double.valueOf(transactionRecordDto.amount()));
         transactionProducer.publishTransactionMessage(transactionRecordDto);
         transaction = transactionRepository.save(transaction);
         return new TransactionPublicDto(
