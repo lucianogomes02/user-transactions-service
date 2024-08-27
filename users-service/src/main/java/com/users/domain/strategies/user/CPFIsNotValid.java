@@ -1,4 +1,6 @@
-package com.users.domain.strategies;
+package com.users.domain.strategies.user;
+
+import com.users.domain.strategies.ValidationMessageStrategy;
 
 public class CPFIsNotValid implements ValidationMessageStrategy {
     @Override
