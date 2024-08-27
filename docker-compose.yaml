@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - default
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+      - "15672:15672"
+    networks:
+      - default
+
+  transactions:
+    build:
+      context: .
+      dockerfile: ./users-service/Dockerfile-users
+    restart: always
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_RABBITMQ_HOST: ${RABBITMQ_HOST}
+    ports:
+      - ${TRANSACTIONS_SERVICE_PORT}:${TRANSACTIONS_SERVICE_PORT}
+    networks:
+      - default
+
+  users:
+    build:
+      context: .
+      dockerfile: ./users-service/Dockerfile-users
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - ${USERS_SERVICE_PORT}:${USERS_SERVICE_PORT}
+    networks:
+      - default
+
+networks:
+  default:
+    name: user-transactions-services_default

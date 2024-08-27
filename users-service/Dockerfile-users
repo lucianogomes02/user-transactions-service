@@ -1,0 +1,17 @@
+FROM maven AS build
+
+WORKDIR /app
+COPY users-service/pom.xml users-service/
+COPY users-service/src users-service/src/
+
+RUN mvn -f users-service/pom.xml clean package
+
+FROM openjdk:17-slim
+
+WORKDIR /app
+
+COPY --from=build /app/users-service/target/*.jar /app/users-service.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "/app/users-service.jar"]

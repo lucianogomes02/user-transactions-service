@@ -1,0 +1,17 @@
+FROM maven AS build
+
+WORKDIR /app
+COPY transactions-service/pom.xml transactions-service/
+COPY transactions-service/src transactions-service/src/
+
+RUN mvn -f transactions-service/pom.xml clean package
+
+FROM openjdk:17-slim
+
+WORKDIR /app
+
+COPY --from=build /app/transactions-service/target/*.jar /app/transactions-service.jar
+
+EXPOSE 8081
+
+CMD ["java", "-jar", "/app/transactions-service.jar"]
