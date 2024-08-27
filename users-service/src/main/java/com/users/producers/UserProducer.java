@@ -11,7 +11,7 @@ public class UserProducer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Value(value = "${broker.queue.user.to.transaction}")
+    @Value(value = "${broker.queue.user.name}")
     private String routingKey;
 
     public void pulishUserTransactionMessage(UserTransactionDto userTransactionDto) {

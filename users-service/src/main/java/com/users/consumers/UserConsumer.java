@@ -11,7 +11,7 @@ public class UserConsumer {
     @Autowired
     private UserService userService;
 
-    @RabbitListener(queues = "${broker.queue.transaction.to.user}")
+    @RabbitListener(queues = "${broker.queue.transaction.name}")
     public void listenTransactionQueue(UserTransactionDto message) {
         userService.updateWalletFunds(message);
     }

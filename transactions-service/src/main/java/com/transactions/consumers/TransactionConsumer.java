@@ -12,7 +12,7 @@ public class TransactionConsumer {
     @Autowired
     private TransactionService transactionService;
 
-    @RabbitListener(queues = "${broker.queue.user.to.transaction}")
+    @RabbitListener(queues = "${broker.queue.user.name}")
     public void listenUserQueue(@Payload TransactionRecordDto message) {
         transactionService.createTransaction(message);
     }

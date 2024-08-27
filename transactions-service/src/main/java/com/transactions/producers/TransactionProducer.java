@@ -12,7 +12,7 @@ public class TransactionProducer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Value(value = "${broker.queue.transaction.to.user}")
+    @Value(value = "${broker.queue.transaction.name}")
     private String routingKey;
 
     public void publishTransactionMessage(TransactionRecordDto transactionRecordDto) {
