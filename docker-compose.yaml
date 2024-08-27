@@ -44,10 +44,12 @@ services:
     restart: always
     depends_on:
       - mysql
+      - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_RABBITMQ_HOST: ${RABBITMQ_HOST}
     ports:
       - ${USERS_SERVICE_PORT}:${USERS_SERVICE_PORT}
     networks:
