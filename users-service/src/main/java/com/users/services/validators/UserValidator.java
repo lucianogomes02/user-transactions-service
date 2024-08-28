@@ -7,7 +7,8 @@ import com.users.domain.specifications.user.CPFIsUnique;
 import com.users.domain.specifications.user.CPFIsValid;
 import com.users.domain.specifications.user.EmailIsUnique;
 import com.users.domain.specifications.user.EmailIsValid;
-import com.users.domain.strategies.*;
+import com.users.domain.strategies.DefaultValidationMessage;
+import com.users.domain.strategies.ValidationMessageStrategy;
 import com.users.domain.strategies.user.CPFIsNotUnique;
 import com.users.domain.strategies.user.CPFIsNotValid;
 import com.users.domain.strategies.user.EmailIsNotUnique;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class UserValidator implements Validator<User>{
@@ -26,7 +26,7 @@ public class UserValidator implements Validator<User>{
     private UserRepository userRepository;
 
     @Autowired
-    private List<Specification<User>> userSpecifications;
+    protected List<Specification<User>> userSpecifications;
 
     @PostConstruct
     public void initSpecifications() {
@@ -43,8 +43,7 @@ public class UserValidator implements Validator<User>{
                 var userForValidation = getUserForValidation(user, userSpecification);
                 if (!userSpecification.isSatisfiedBy(userForValidation)) {
                     throw new UserValidationException(
-                            Objects.requireNonNull(
-                                    getValidationMessageStrategy(userSpecification)).getMessage()
+                            getValidationMessageStrategy(userSpecification).getMessage()
                     );
                 }
             }
@@ -59,13 +58,13 @@ public class UserValidator implements Validator<User>{
         };
     }
 
-    private ValidationMessageStrategy getValidationMessageStrategy(Specification<User> userSpecification) {
+    ValidationMessageStrategy getValidationMessageStrategy(Specification<User> userSpecification) {
         return switch (userSpecification.getClass().getSimpleName()) {
             case "CPFIsUnique" -> new CPFIsNotUnique();
             case "CPFIsValid" -> new CPFIsNotValid();
             case "EmailIsValid" -> new EmailIsNotValid();
             case "EmailIsUnique" -> new EmailIsNotUnique();
-            default -> null;
+            default -> new DefaultValidationMessage();
         };
     }
 }
