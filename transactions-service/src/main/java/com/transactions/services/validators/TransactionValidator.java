@@ -20,7 +20,7 @@ import java.util.Objects;
 @Component
 public class TransactionValidator implements Validator<Transaction> {
     @Autowired
-    private List<Specification<Transaction>> transactionSpecifications;
+    protected List<Specification<Transaction>> transactionSpecifications;
 
     @PostConstruct
     public void initSpecifications() {
@@ -43,7 +43,7 @@ public class TransactionValidator implements Validator<Transaction> {
         );
     }
 
-    private ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
+    ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
             case "SenderAndReceiverAreNotTheSame" -> new SenderAndReceiverAreTheSame();
             case "TransactionIsNotProcessing" -> new TransactionIsNotProcessing();

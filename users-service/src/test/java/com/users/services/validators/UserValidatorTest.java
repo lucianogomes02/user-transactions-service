@@ -3,12 +3,10 @@ package com.users.services.validators;
 import com.users.application.exceptions.UserValidationException;
 import com.users.domain.aggregate.User;
 import com.users.domain.specifications.Specification;
-import com.users.domain.strategies.ValidationMessageStrategy;
 import com.users.domain.strategies.user.CPFIsNotUnique;
 import com.users.domain.strategies.user.CPFIsNotValid;
 import com.users.domain.strategies.user.EmailIsNotUnique;
 import com.users.domain.strategies.user.EmailIsNotValid;
-import com.users.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +25,6 @@ import static org.mockito.Mockito.*;
 
 @PrepareForTest(UserValidator.class)
 public class UserValidatorTest {
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private ValidationMessageStrategy cpfIsNotUniqueMessageStrategy;
-
-    @Mock
-    private ValidationMessageStrategy cpfIsNotValidMessageStrategy;
-
-    @Mock
-    private ValidationMessageStrategy emailIsNotUniqueMessageStrategy;
-
-    @Mock
-    private ValidationMessageStrategy emailIsNotValidMessageStrategy;
-
     @Mock
     private Specification<User> CPFIsUnique;
 
@@ -59,7 +41,7 @@ public class UserValidatorTest {
     private UserValidator userValidator;
 
     @BeforeEach
-    public void setUp() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         List<Specification<User>> specifications = new ArrayList<>();
