@@ -5,9 +5,9 @@ import com.transactions.domain.value_objects.TransactionStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionIsNotProcessing implements Specification<Transaction> {
+public class TransactionIsProcessing implements Specification<Transaction> {
     @Override
     public boolean isSatisfiedBy(Transaction transaction) {
-        return !transaction.getStatus().equals(TransactionStatus.PROCESSING);
+        return transaction.getStatus().equals(TransactionStatus.PROCESSING);
     }
 }

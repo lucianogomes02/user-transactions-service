@@ -5,12 +5,11 @@ import com.transactions.domain.aggregate.Transaction;
 import com.transactions.domain.specifications.transaction.SenderAndReceiverAreNotTheSame;
 import com.transactions.domain.specifications.transaction.Specification;
 import com.transactions.domain.specifications.transaction.TransactionAmountIsValid;
-import com.transactions.domain.specifications.transaction.TransactionIsNotProcessing;
+import com.transactions.domain.specifications.transaction.TransactionIsProcessing;
 import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSame;
 import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
-import com.transactions.domain.strategies.transaction.TransactionIsProcessing;
+import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
 import com.transactions.domain.strategies.transaction.ValidationMessageStrategy;
-import com.transactions.repositories.TransactionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class TransactionValidator implements Validator<Transaction> {
     @PostConstruct
     public void initSpecifications() {
         transactionSpecifications.add(new SenderAndReceiverAreNotTheSame());
-        transactionSpecifications.add(new TransactionIsNotProcessing());
+        transactionSpecifications.add(new TransactionIsProcessing());
         transactionSpecifications.add(new TransactionAmountIsValid());
     }
 
@@ -47,7 +46,7 @@ public class TransactionValidator implements Validator<Transaction> {
     private ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
             case "SenderAndReceiverAreNotTheSame" -> new SenderAndReceiverAreTheSame();
-            case "TransactionIsNotProcessing" -> new TransactionIsProcessing();
+            case "TransactionIsNotProcessing" -> new TransactionIsNotProcessing();
             case "TransactionAmountIsValid" -> new TransactionAmountNotValid();
             default -> null;
         };

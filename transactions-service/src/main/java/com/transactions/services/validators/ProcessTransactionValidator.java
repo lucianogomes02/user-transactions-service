@@ -3,8 +3,8 @@ package com.transactions.services.validators;
 import com.transactions.application.exceptions.TransactionValidationException;
 import com.transactions.domain.aggregate.Transaction;
 import com.transactions.domain.specifications.transaction.Specification;
-import com.transactions.domain.specifications.transaction.TransactionIsNotProcessing;
-import com.transactions.domain.strategies.transaction.TransactionIsProcessing;
+import com.transactions.domain.specifications.transaction.TransactionIsProcessing;
+import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
 import com.transactions.domain.strategies.transaction.ValidationMessageStrategy;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ProcessTransactionValidator implements Validator<Transaction> {
 
     @PostConstruct
     public void initSpecifications() {
-        processTransactionSpecifications.add(new TransactionIsNotProcessing());
+        processTransactionSpecifications.add(new TransactionIsProcessing());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ProcessTransactionValidator implements Validator<Transaction> {
 
     private ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
-            case "TransactionIsNotProcessing" -> new TransactionIsProcessing();
+            case "TransactionIsProcessing" -> new TransactionIsNotProcessing();
             default -> null;
         };
     }
