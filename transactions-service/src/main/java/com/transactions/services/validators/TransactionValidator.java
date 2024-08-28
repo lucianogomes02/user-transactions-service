@@ -50,7 +50,7 @@ public class TransactionValidator implements Validator<Transaction> {
     private ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
             case "SenderAndReceiverAreNotTheSame" -> new SenderAndReceiverAreTheSame();
-            case "TransactionIsNotSucceeded" -> new TransactionIsProcessing();
+            case "TransactionIsNotProcessing" -> new TransactionIsProcessing();
             case "TransactionAmountIsValid" -> new TransactionAmountNotValid();
             default -> null;
         };
