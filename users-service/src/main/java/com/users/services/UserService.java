@@ -2,13 +2,12 @@ package com.users.services;
 
 import com.users.domain.aggregate.User;
 import com.users.domain.entities.TransactionContext;
-import com.users.domain.value_objects.UserPublicDto;
-import com.users.domain.value_objects.UserRecordDto;
-import com.users.domain.value_objects.UserTransactionDto;
+import com.users.domain.value_objects.*;
 import com.users.services.producers.UserProducer;
 import com.users.repositories.UserRepository;
 import com.users.services.validators.UserTransactionValidator;
 import com.users.services.validators.UserValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,5 +103,16 @@ public class UserService {
                 user.getUpdatedAt().toString()
             ))
             .collect(Collectors.toList());
+    }
+
+    public UserCredentialsResponse verifyCredentials(@Valid UserCredentialsDto userCredentialsDto) {
+        var user = userRepository.findByEmail(userCredentialsDto.username());
+        if (user != null && user.getPassword().equals(userCredentialsDto.password())) {
+            return new UserCredentialsResponse(
+                user.getId().toString(),
+                user.getEmail()
+            );
+        }
+        return null;
     }
 }
