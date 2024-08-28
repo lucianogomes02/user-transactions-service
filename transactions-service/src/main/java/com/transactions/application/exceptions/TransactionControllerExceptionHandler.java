@@ -30,6 +30,12 @@ public class TransactionControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDto);
     }
 
+    @ExceptionHandler(TransactionValidationException.class)
+    public ResponseEntity handleTransactionValidationException(TransactionValidationException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage(), "400");
+        return ResponseEntity.badRequest().body(exceptionDto);
+    }
+
     private record ValidationErrorData(String campo, String mensagem) {
         public ValidationErrorData(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());

@@ -1,4 +1,4 @@
-package com.users.producers;
+package com.users.services.producers;
 
 import com.users.domain.value_objects.UserTransactionDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
