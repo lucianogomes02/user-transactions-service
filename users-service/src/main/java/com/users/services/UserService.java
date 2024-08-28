@@ -1,11 +1,13 @@
 package com.users.services;
 
 import com.users.domain.aggregate.User;
+import com.users.domain.entities.TransactionContext;
 import com.users.domain.value_objects.UserPublicDto;
 import com.users.domain.value_objects.UserRecordDto;
 import com.users.domain.value_objects.UserTransactionDto;
 import com.users.producers.UserProducer;
 import com.users.repositories.UserRepository;
+import com.users.services.validators.UserTransactionValidator;
 import com.users.services.validators.UserValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class UserService {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private UserTransactionValidator userTransactionValidator;
 
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
@@ -50,6 +55,13 @@ public class UserService {
         var senderUser = userRepository.findById(UUID.fromString(userTransactionDto.senderId()));
         var receiverUser = userRepository.findById(UUID.fromString(userTransactionDto.receiverId()));
 
+        var transactionContext = new TransactionContext();
+        transactionContext.setUserSender(senderUser.orElse(null));
+        transactionContext.setUserReceiver(receiverUser.orElse(null));
+        transactionContext.setAmount(userTransactionDto.amount());
+
+        userTransactionValidator.validate(transactionContext);
+
         if (senderUser.isPresent() && receiverUser.isPresent()) {
             var sender = senderUser.get();
             var receiver = receiverUser.get();
@@ -60,7 +72,6 @@ public class UserService {
                 userRepository.save(sender);
                 userRepository.save(receiver);
             }
-
             userProducer.pulishUserTransactionMessage(userTransactionDto);
         }
     }
