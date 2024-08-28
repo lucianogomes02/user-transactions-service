@@ -5,7 +5,7 @@ import com.users.domain.entities.TransactionContext;
 import com.users.domain.value_objects.UserPublicDto;
 import com.users.domain.value_objects.UserRecordDto;
 import com.users.domain.value_objects.UserTransactionDto;
-import com.users.producers.UserProducer;
+import com.users.services.producers.UserProducer;
 import com.users.repositories.UserRepository;
 import com.users.services.validators.UserTransactionValidator;
 import com.users.services.validators.UserValidator;

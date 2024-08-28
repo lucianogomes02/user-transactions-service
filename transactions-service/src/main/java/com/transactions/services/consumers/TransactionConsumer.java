@@ -1,4 +1,4 @@
-package com.transactions.consumers;
+package com.transactions.services.consumers;
 
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.services.TransactionService;

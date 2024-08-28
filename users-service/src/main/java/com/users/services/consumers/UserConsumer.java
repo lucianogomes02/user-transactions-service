@@ -1,4 +1,4 @@
-package com.users.consumers;
+package com.users.services.consumers;
 
 import com.users.domain.value_objects.UserTransactionDto;
 import com.users.services.UserService;

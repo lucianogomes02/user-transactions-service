@@ -4,7 +4,7 @@ import com.transactions.domain.aggregate.Transaction;
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;
-import com.transactions.producers.TransactionProducer;
+import com.transactions.services.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
 import com.transactions.services.validators.ProcessTransactionValidator;
 import com.transactions.services.validators.TransactionValidator;
