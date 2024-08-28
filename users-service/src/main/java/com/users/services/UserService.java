@@ -52,6 +52,23 @@ public class UserService {
 
     @Transactional
     public void updateWalletFunds(UserTransactionDto userTransactionDto) {
+        try {
+            registerTransaction(userTransactionDto);
+        } catch (Exception e) {
+            userTransactionDto = new UserTransactionDto(
+                userTransactionDto.id(),
+                userTransactionDto.senderId(),
+                userTransactionDto.receiverId(),
+                userTransactionDto.amount(),
+                "FAILED",
+                userTransactionDto.createdAt()
+            );
+        } finally {
+            userProducer.pulishUserTransactionMessage(userTransactionDto);
+        }
+    }
+
+    private void registerTransaction(UserTransactionDto userTransactionDto) {
         var senderUser = userRepository.findById(UUID.fromString(userTransactionDto.senderId()));
         var receiverUser = userRepository.findById(UUID.fromString(userTransactionDto.receiverId()));
 
@@ -72,7 +89,6 @@ public class UserService {
                 userRepository.save(sender);
                 userRepository.save(receiver);
             }
-            userProducer.pulishUserTransactionMessage(userTransactionDto);
         }
     }
 

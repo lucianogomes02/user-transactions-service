@@ -57,7 +57,7 @@ public class TransactionService {
         if (transaction.isPresent()) {
             var onGoingTransaction = transaction.get();
             processTransactionValidator.validate(onGoingTransaction);
-            onGoingTransaction.setStatus(TransactionStatus.SUCCEEDED);
+            onGoingTransaction.setStatus(TransactionStatus.valueOf(transactionPublicDto.status()));
         }
     }
 
