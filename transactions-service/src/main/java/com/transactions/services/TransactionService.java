@@ -6,14 +6,11 @@ import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;
 import com.transactions.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
+import com.transactions.services.validators.ProcessTransactionValidator;
 import com.transactions.services.validators.TransactionValidator;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,6 +25,9 @@ public class TransactionService {
 
     @Autowired
     private TransactionValidator transactionValidator;
+
+    @Autowired
+    private ProcessTransactionValidator processTransactionValidator;
 
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
@@ -56,6 +56,7 @@ public class TransactionService {
 
         if (transaction.isPresent()) {
             var onGoingTransaction = transaction.get();
+            processTransactionValidator.validate(onGoingTransaction);
             onGoingTransaction.setStatus(TransactionStatus.SUCCEEDED);
         }
     }

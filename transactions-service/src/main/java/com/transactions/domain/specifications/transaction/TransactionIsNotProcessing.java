@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class TransactionIsNotProcessing implements Specification<Transaction> {
     @Override
     public boolean isSatisfiedBy(Transaction transaction) {
-        return !transaction.getStatus().equals(TransactionStatus.SUCCEEDED);
+        return !transaction.getStatus().equals(TransactionStatus.PROCESSING);
     }
 }
