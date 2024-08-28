@@ -52,8 +52,20 @@ public class UserService {
 
     @Transactional
     public void updateWalletFunds(UserTransactionDto userTransactionDto) {
-        registerTransaction(userTransactionDto);
-        userProducer.pulishUserTransactionMessage(userTransactionDto);
+        try {
+            registerTransaction(userTransactionDto);
+        } catch (Exception e) {
+            userTransactionDto = new UserTransactionDto(
+                userTransactionDto.id(),
+                userTransactionDto.senderId(),
+                userTransactionDto.receiverId(),
+                userTransactionDto.amount(),
+                "FAILED",
+                userTransactionDto.createdAt()
+            );
+        } finally {
+            userProducer.pulishUserTransactionMessage(userTransactionDto);
+        }
     }
 
     private void registerTransaction(UserTransactionDto userTransactionDto) {
