@@ -6,6 +6,7 @@ import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;
 import com.transactions.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
+import com.transactions.services.validators.TransactionValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,17 @@ public class TransactionService {
     @Autowired
     private TransactionProducer transactionProducer;
 
+    @Autowired
+    private TransactionValidator transactionValidator;
+
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
         var transaction = new Transaction();
         transaction.setSenderId(UUID.fromString(transactionRecordDto.senderId()));
         transaction.setReceiverId(UUID.fromString(transactionRecordDto.receiverId()));
         transaction.setAmount(Double.valueOf(transactionRecordDto.amount()));
+        transactionValidator.validate(transaction);
+
         transaction = transactionRepository.save(transaction);
         var transactionDto = new TransactionPublicDto(
             transaction.getId().toString(),
