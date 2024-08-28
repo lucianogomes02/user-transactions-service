@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class CPFIsUnique implements Specification<User> {
     @Override
     public boolean isSatisfiedBy(User user) {
-        return user.getCpf() != null && !user.getCpf().isEmpty();
+        return user == null;
     }
 }

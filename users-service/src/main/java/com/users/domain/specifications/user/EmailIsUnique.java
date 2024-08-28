@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class EmailIsUnique implements Specification<User> {
     @Override
     public boolean isSatisfiedBy(User user) {
-        return user.getEmail() != null && !user.getEmail().isEmpty();
+        return user == null;
     }
 }

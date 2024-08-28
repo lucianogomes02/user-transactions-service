@@ -23,9 +23,9 @@ public class UserConstrollerExceptionHandler {
         return ResponseEntity.badRequest().body(erros.stream().map(ValidationErrorData::new).toList());
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity handleDataIntegrityViolationException(DataIntegrityViolationException e) {
-        ExceptionDto exceptionDto = new ExceptionDto("Usuário inválido ou já cadastrado", "400");
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity handleUserValidationException(UserValidationException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage(), "400");
         return ResponseEntity.badRequest().body(exceptionDto);
     }
 

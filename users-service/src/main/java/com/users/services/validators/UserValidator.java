@@ -40,7 +40,8 @@ public class UserValidator implements Validator<User>{
     public void validate(User user) {
         userSpecifications.forEach(
             userSpecification -> {
-                if (!userSpecification.isSatisfiedBy(user)) {
+                var userForValidation = getUserForValidation(user, userSpecification);
+                if (!userSpecification.isSatisfiedBy(userForValidation)) {
                     throw new UserValidationException(
                             Objects.requireNonNull(
                                     getValidationMessageStrategy(userSpecification)).getMessage()
@@ -48,6 +49,14 @@ public class UserValidator implements Validator<User>{
                 }
             }
         );
+    }
+
+    private User getUserForValidation(User user, Specification<User> userSpecification) {
+        return switch (userSpecification.getClass().getSimpleName()) {
+            case "CPFIsUnique" -> userRepository.findByCpf(user.getCpf());
+            case "EmailIsUnique" -> userRepository.findByEmail(user.getEmail());
+            default -> user;
+        };
     }
 
     private ValidationMessageStrategy getValidationMessageStrategy(Specification<User> userSpecification) {
