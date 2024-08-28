@@ -8,10 +8,12 @@ import com.transactions.domain.strategies.transaction.TransactionIsProcessing;
 import com.transactions.domain.strategies.transaction.ValidationMessageStrategy;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class ProcessTransactionValidator implements Validator<Transaction> {
     @Autowired
     private List<Specification<Transaction>> processTransactionSpecifications;
