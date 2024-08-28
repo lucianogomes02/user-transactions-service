@@ -1,6 +1,6 @@
 package com.transactions.domain.strategies.transaction;
 
-public class TransactionIsSucceeded implements ValidationMessageStrategy {
+public class TransactionIsProcessing implements ValidationMessageStrategy {
     @Override
     public String getMessage() {
         return "Transação já foi concluída";

@@ -5,10 +5,10 @@ import com.transactions.domain.aggregate.Transaction;
 import com.transactions.domain.specifications.transaction.SenderAndReceiverAreNotTheSame;
 import com.transactions.domain.specifications.transaction.Specification;
 import com.transactions.domain.specifications.transaction.TransactionAmountIsValid;
-import com.transactions.domain.specifications.transaction.TransactionIsNotSucceeded;
+import com.transactions.domain.specifications.transaction.TransactionIsNotProcessing;
 import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSame;
 import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
-import com.transactions.domain.strategies.transaction.TransactionIsSucceeded;
+import com.transactions.domain.strategies.transaction.TransactionIsProcessing;
 import com.transactions.domain.strategies.transaction.ValidationMessageStrategy;
 import com.transactions.repositories.TransactionRepository;
 import jakarta.annotation.PostConstruct;
@@ -29,7 +29,7 @@ public class TransactionValidator implements Validator<Transaction> {
     @PostConstruct
     public void initSpecifications() {
         transactionSpecifications.add(new SenderAndReceiverAreNotTheSame());
-        transactionSpecifications.add(new TransactionIsNotSucceeded());
+        transactionSpecifications.add(new TransactionIsNotProcessing());
         transactionSpecifications.add(new TransactionAmountIsValid());
     }
 
@@ -50,7 +50,7 @@ public class TransactionValidator implements Validator<Transaction> {
     private ValidationMessageStrategy getValidationMessageStrategy(Specification<Transaction> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
             case "SenderAndReceiverAreNotTheSame" -> new SenderAndReceiverAreTheSame();
-            case "TransactionIsNotSucceeded" -> new TransactionIsSucceeded();
+            case "TransactionIsNotSucceeded" -> new TransactionIsProcessing();
             case "TransactionAmountIsValid" -> new TransactionAmountNotValid();
             default -> null;
         };
