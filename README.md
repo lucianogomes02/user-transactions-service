@@ -13,7 +13,16 @@ Os serviços se comunicam entre si através de RabbitMQ, e a aplicação utiliza
 
 ## Como Rodar a Aplicação com Docker Compose
 
-Para rodar a aplicação, você precisa ter o Docker e o Docker Compose instalados na sua máquina. Siga os passos abaixo para iniciar os serviços:
+Para rodar a aplicação, você precisa das seguintes técnologias instaladas na sua máquina:
+
+- Docker e Docker Compose
+- Java 17
+- Maven
+- MySQL Workbench (opcional)
+- OpenSSL
+- Git
+- IDE de sua preferência (IntelliJ IDEA, Eclipse, etc)
+- Postman ou Insomnia (opcional)
 
 ### 1 - Clone o Repositório
 
@@ -81,6 +90,8 @@ Cada serviço será construído com base no Dockerfile correspondente e terá se
 - Transactions Service: http://localhost:8081
 - Users Service: http://localhost:8080
 - RabbitMQ Management Console: http://localhost:15672 (usuário: guest, senha: guest)
+
+Essas rotas levaram diretamente para a documentação dos serviços (Swagger) onde você pode testar os endpoints.
 
 
 ## Estrutura Básica da Arquitetura
