@@ -10,9 +10,11 @@ import com.users.services.validators.UserValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,10 +34,22 @@ public class UserService {
     @Autowired
     private UserTransactionValidator userTransactionValidator;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
-        var user = new User();
-        BeanUtils.copyProperties(userRecordDto, user);
+        var user = new User(
+            UUID.randomUUID(),
+            userRecordDto.name(),
+            userRecordDto.email(),
+            bCryptPasswordEncoder.encode(userRecordDto.password()),
+            userRecordDto.cpf(),
+            userRecordDto.walletFunds(),
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            true
+        );
         userValidator.validate(user);
         user = userRepository.save(user);
         return new UserPublicDto(
@@ -107,7 +121,7 @@ public class UserService {
 
     public UserCredentialsResponse verifyCredentials(@Valid UserCredentialsDto userCredentialsDto) {
         var user = userRepository.findByEmail(userCredentialsDto.username());
-        if (user != null && user.getPassword().equals(userCredentialsDto.password())) {
+        if (user != null && bCryptPasswordEncoder.matches(userCredentialsDto.password(), user.getPassword())) {
             return new UserCredentialsResponse(
                 user.getId().toString(),
                 user.getEmail()
