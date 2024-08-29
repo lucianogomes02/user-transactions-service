@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +23,17 @@ public class TransactionController {
 
     @Operation(summary = "Get all transactions")
     @GetMapping("/transactions")
-    public ResponseEntity<Iterable<TransactionPublicDto>> getTransactions() {
+    public ResponseEntity<Iterable<TransactionPublicDto>> getTransactions(JwtAuthenticationToken jwt) {
         Iterable<TransactionPublicDto> transactions = transactionService.getTransactions();
         return ResponseEntity.ok(transactions);
     }
 
     @Operation(summary = "Create a transaction")
     @PostMapping("/transactions")
-    public ResponseEntity<TransactionPublicDto> createTransaction(@RequestBody @Valid TransactionRecordDto transactionRecordDto) {
+    public ResponseEntity<TransactionPublicDto> createTransaction(
+            @RequestBody @Valid TransactionRecordDto transactionRecordDto,
+            JwtAuthenticationToken jwt
+    ) {
         TransactionPublicDto transaction = transactionService.createTransaction(transactionRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
     }
