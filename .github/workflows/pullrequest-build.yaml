@@ -28,7 +28,7 @@ jobs:
       docker:
         image: docker:19.03.12
         options: --privileged
-        
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -54,9 +54,9 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose -f docker-compose.yml exec -T transactions mvn test
-          docker-compose -f docker-compose.yml exec -T users mvn test
-          docker-compose -f docker-compose.yml exec -T auth mvn test
+          docker-compose exec -T transactions mvn test
+          docker-compose exec -T users mvn test
+          docker-compose exec -T auth mvn test
 
       - name: Shutdown Docker Compose
         run: |
