@@ -122,5 +122,9 @@ Estrutura de Pastas
 
 - RabbitMQ: Sistema de mensageria que facilita a comunicação assíncrona entre os serviços.
 
+Abaixo temos um modelo gráfico de como funciona a arquitetura da aplicação:
+
+![img.png](docs/img.png)
+
 Observações:
 Certifique-se de que todos os arquivos de configuração e dependências estão corretamente configurados antes de iniciar os contêineres. Verifique os logs dos serviços para identificar qualquer problema durante a inicialização.
