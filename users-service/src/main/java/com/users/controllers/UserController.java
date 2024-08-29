@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class UserController {
 
     @Operation(summary = "Get all users")
     @GetMapping("/users")
-    public ResponseEntity<Iterable<UserPublicDto>> getAllUsers() {
+    public ResponseEntity<Iterable<UserPublicDto>> getAllUsers(JwtAuthenticationToken jwt) {
         Iterable<UserPublicDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
