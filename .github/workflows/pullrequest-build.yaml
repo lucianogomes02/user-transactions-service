@@ -59,9 +59,9 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec -T transactions mvn test
-          docker-compose exec -T users mvn test
-          docker-compose exec -T auth mvn test
+          docker run --rm -v $(pwd)/transactions-service:/app -w /app maven:3.8.5-openjdk-17 mvn test
+          docker run --rm -v $(pwd)/users-service:/app -w /app maven:3.8.5-openjdk-17 mvn test
+          docker run --rm -v $(pwd)/auth-service:/app -w /app maven:3.8.5-openjdk-17 mvn test
 
       - name: Shutdown Docker Compose
         run: |
