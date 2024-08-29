@@ -66,7 +66,8 @@ public class UserService {
     @Transactional
     public void updateWalletFunds(UserTransactionDto userTransactionDto) {
         try {
-            registerTransaction(userTransactionDto);
+            var userTransactionResponse = registerTransaction(userTransactionDto);
+            userProducer.pulishUserTransactionMessage(userTransactionResponse);
         } catch (Exception e) {
             userTransactionDto = new UserTransactionDto(
                 userTransactionDto.id(),
@@ -76,12 +77,11 @@ public class UserService {
                 "FAILED",
                 userTransactionDto.createdAt()
             );
-        } finally {
             userProducer.pulishUserTransactionMessage(userTransactionDto);
         }
     }
 
-    private void registerTransaction(UserTransactionDto userTransactionDto) {
+    private UserTransactionDto registerTransaction(UserTransactionDto userTransactionDto) {
         var senderUser = userRepository.findById(UUID.fromString(userTransactionDto.senderId()));
         var receiverUser = userRepository.findById(UUID.fromString(userTransactionDto.receiverId()));
 
@@ -96,13 +96,21 @@ public class UserService {
             var sender = senderUser.get();
             var receiver = receiverUser.get();
 
-            if (sender.getWalletFunds() >= userTransactionDto.amount()) {
+            if (sender.getWalletFunds() > userTransactionDto.amount()) {
                 sender.setWalletFunds(sender.getWalletFunds() - userTransactionDto.amount());
                 receiver.setWalletFunds(receiver.getWalletFunds() + userTransactionDto.amount());
                 userRepository.save(sender);
                 userRepository.save(receiver);
             }
         }
+        return new UserTransactionDto(
+            userTransactionDto.id(),
+            userTransactionDto.senderId(),
+            userTransactionDto.receiverId(),
+            userTransactionDto.amount(),
+            "SUCCEEDED",
+            userTransactionDto.createdAt()
+        );
     }
 
     public List<UserPublicDto> getAllUsers() {

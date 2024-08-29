@@ -34,7 +34,8 @@ public class TransactionController {
             @RequestBody @Valid TransactionRecordDto transactionRecordDto,
             JwtAuthenticationToken jwt
     ) {
-        TransactionPublicDto transaction = transactionService.createTransaction(transactionRecordDto);
+        String currentUserId = jwt.getToken().getClaimAsString("sub");
+        TransactionPublicDto transaction = transactionService.createTransaction(transactionRecordDto, currentUserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
     }
 }
