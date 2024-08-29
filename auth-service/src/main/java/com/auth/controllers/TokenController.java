@@ -3,6 +3,8 @@ package com.auth.controllers;
 import com.auth.dto.LoginRequest;
 import com.auth.dto.LoginResponse;
 import com.auth.services.UserServiceClient;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 
+@Tag(name = "Auth Token Controller", description = "Endpoint for user authentication")
 @RestController
 @RequestMapping("/auth")
 public class TokenController {
@@ -24,6 +27,7 @@ public class TokenController {
     @Autowired
     private UserServiceClient userServiceClient;
 
+    @Operation(summary = "Login User (Generate JWT Token)")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         var userCredentialsResponse = userServiceClient.verifyCredentials(loginRequest.username(), loginRequest.password());
