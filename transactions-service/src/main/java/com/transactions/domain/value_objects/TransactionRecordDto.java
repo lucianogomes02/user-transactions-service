@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record TransactionRecordDto(
         @NotBlank
-        String senderId,
-        @NotBlank
         String receiverId,
         @NotBlank
         String amount

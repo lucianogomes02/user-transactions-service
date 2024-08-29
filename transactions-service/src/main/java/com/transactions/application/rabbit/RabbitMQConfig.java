@@ -27,27 +27,27 @@ public class RabbitMQConfig {
     @Bean
     public Queue queue() {
         return QueueBuilder.durable(queue)
-                .withArgument("x-dead-letter-exchange", "dead-letter-exchange")
-                .withArgument("x-dead-letter-routing-key", "dead-letter-routing-key")
+                .withArgument("x-dead-letter-exchange", "transaction-dead-letter-exchange")
+                .withArgument("x-dead-letter-routing-key", "transaction.dead-letter-routing-key")
                 .withArgument("x-message-ttl", 5000)
                 .build();
     }
 
     @Bean
     public Queue deadLetterQueue() {
-        return QueueBuilder.durable("dead-letter-queue").build();
+        return QueueBuilder.durable("transaction-dead-letter-queue").build();
     }
 
     @Bean
     public DirectExchange deadLetterExchange() {
-        return new DirectExchange("dead-letter-exchange");
+        return new DirectExchange("transaction-dead-letter-exchange");
     }
 
     @Bean
     public Binding deadLetterBinding() {
         return BindingBuilder.bind(deadLetterQueue())
                 .to(deadLetterExchange())
-                .with("dead-letter-routing-key");
+                .with("transaction.dead-letter-routing-key");
     }
 
     @Bean
@@ -66,8 +66,8 @@ public class RabbitMQConfig {
     public RecoveryCallback<Void> republishMessageRecovereyCallback(RabbitTemplate template) {
         RepublishMessageRecoverer recoverer = new RepublishMessageRecoverer(
                 template,
-                "dead-letter-exchange",
-                "dead-letter-routing-key"
+                "transaction-dead-letter-exchange",
+                "transaction.dead-letter-routing-key"
         );
 
         return new RecoveryCallback<Void>() {

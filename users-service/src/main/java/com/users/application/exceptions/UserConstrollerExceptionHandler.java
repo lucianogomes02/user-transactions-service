@@ -1,13 +1,13 @@
 package com.users.application.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
 
 @RestControllerAdvice
 public class UserConstrollerExceptionHandler {
@@ -27,6 +27,12 @@ public class UserConstrollerExceptionHandler {
     public ResponseEntity handleUserValidationException(UserValidationException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage(), "400");
         return ResponseEntity.badRequest().body(exceptionDto);
+    }
+
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<ExceptionDto> handleResourceAccessException(ResourceAccessException e) {
+        var exceptionDto = new ExceptionDto("Usuários temporariamente indisponíveis", "503");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(exceptionDto);
     }
 
     private record ValidationErrorData(String campo, String mensagem) {

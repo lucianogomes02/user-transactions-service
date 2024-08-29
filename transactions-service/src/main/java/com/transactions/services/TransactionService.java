@@ -30,9 +30,9 @@ public class TransactionService {
     private ProcessTransactionValidator processTransactionValidator;
 
     @Transactional
-    public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto) {
+    public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto, String currentUserId) {
         var transaction = new Transaction();
-        transaction.setSenderId(UUID.fromString(transactionRecordDto.senderId()));
+        transaction.setSenderId(UUID.fromString(currentUserId));
         transaction.setReceiverId(UUID.fromString(transactionRecordDto.receiverId()));
         transaction.setAmount(Double.valueOf(transactionRecordDto.amount()));
         transactionValidator.validate(transaction);

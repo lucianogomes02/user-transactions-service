@@ -1,0 +1,17 @@
+FROM maven AS build
+
+WORKDIR /app
+COPY auth-service/pom.xml auth-service/
+COPY auth-service/src auth-service/src/
+
+RUN mvn -f auth-service/pom.xml clean package
+
+FROM openjdk:17-slim
+
+WORKDIR /app
+
+COPY --from=build /app/auth-service/target/*.jar /app/auth-service.jar
+
+EXPOSE 8082
+
+CMD ["java", "-jar", "/app/auth-service.jar"]

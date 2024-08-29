@@ -2,18 +2,18 @@ package com.users.services;
 
 import com.users.domain.aggregate.User;
 import com.users.domain.entities.TransactionContext;
-import com.users.domain.value_objects.UserPublicDto;
-import com.users.domain.value_objects.UserRecordDto;
-import com.users.domain.value_objects.UserTransactionDto;
-import com.users.services.producers.UserProducer;
+import com.users.domain.value_objects.*;
 import com.users.repositories.UserRepository;
+import com.users.services.producers.UserProducer;
 import com.users.services.validators.UserTransactionValidator;
 import com.users.services.validators.UserValidator;
-import org.springframework.beans.BeanUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,10 +33,22 @@ public class UserService {
     @Autowired
     private UserTransactionValidator userTransactionValidator;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
-        var user = new User();
-        BeanUtils.copyProperties(userRecordDto, user);
+        var user = new User(
+            UUID.randomUUID(),
+            userRecordDto.name(),
+            userRecordDto.email(),
+            bCryptPasswordEncoder.encode(userRecordDto.password()),
+            userRecordDto.cpf(),
+            userRecordDto.walletFunds(),
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            true
+        );
         userValidator.validate(user);
         user = userRepository.save(user);
         return new UserPublicDto(
@@ -53,7 +65,8 @@ public class UserService {
     @Transactional
     public void updateWalletFunds(UserTransactionDto userTransactionDto) {
         try {
-            registerTransaction(userTransactionDto);
+            var userTransactionResponse = registerTransaction(userTransactionDto);
+            userProducer.pulishUserTransactionMessage(userTransactionResponse);
         } catch (Exception e) {
             userTransactionDto = new UserTransactionDto(
                 userTransactionDto.id(),
@@ -63,12 +76,11 @@ public class UserService {
                 "FAILED",
                 userTransactionDto.createdAt()
             );
-        } finally {
             userProducer.pulishUserTransactionMessage(userTransactionDto);
         }
     }
 
-    private void registerTransaction(UserTransactionDto userTransactionDto) {
+    private UserTransactionDto registerTransaction(UserTransactionDto userTransactionDto) {
         var senderUser = userRepository.findById(UUID.fromString(userTransactionDto.senderId()));
         var receiverUser = userRepository.findById(UUID.fromString(userTransactionDto.receiverId()));
 
@@ -83,13 +95,21 @@ public class UserService {
             var sender = senderUser.get();
             var receiver = receiverUser.get();
 
-            if (sender.getWalletFunds() >= userTransactionDto.amount()) {
+            if (sender.getWalletFunds() > userTransactionDto.amount()) {
                 sender.setWalletFunds(sender.getWalletFunds() - userTransactionDto.amount());
                 receiver.setWalletFunds(receiver.getWalletFunds() + userTransactionDto.amount());
                 userRepository.save(sender);
                 userRepository.save(receiver);
             }
         }
+        return new UserTransactionDto(
+            userTransactionDto.id(),
+            userTransactionDto.senderId(),
+            userTransactionDto.receiverId(),
+            userTransactionDto.amount(),
+            "SUCCEEDED",
+            userTransactionDto.createdAt()
+        );
     }
 
     public List<UserPublicDto> getAllUsers() {
@@ -104,5 +124,16 @@ public class UserService {
                 user.getUpdatedAt().toString()
             ))
             .collect(Collectors.toList());
+    }
+
+    public UserCredentialsResponse verifyCredentials(@Valid UserCredentialsDto userCredentialsDto) {
+        var user = userRepository.findByEmail(userCredentialsDto.username());
+        if (user != null && bCryptPasswordEncoder.matches(userCredentialsDto.password(), user.getPassword())) {
+            return new UserCredentialsResponse(
+                user.getId().toString(),
+                user.getEmail()
+            );
+        }
+        return null;
     }
 }

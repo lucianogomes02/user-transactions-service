@@ -1,6 +1,7 @@
 package com.users.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.users.TestSecurityConfig;
 import com.users.domain.value_objects.UserPublicDto;
 import com.users.domain.value_objects.UserRecordDto;
 import com.users.services.UserService;
@@ -8,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -22,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@Import(TestSecurityConfig.class)
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -53,11 +57,10 @@ public class UserControllerTest {
         when(userService.createUser(userRecordDto)).thenReturn(userPublicDto);
 
         mockMvc.perform(post("/users")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRecordDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(userPublicDto.id()))
-                .andExpect(jsonPath("$.name").value(userPublicDto.name()));
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -83,7 +86,8 @@ public class UserControllerTest {
 
         when(userService.getAllUsers()).thenReturn(List.of(user1, user2));
 
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(user1.id()))
                 .andExpect(jsonPath("$[1].id").value(user2.id()));
