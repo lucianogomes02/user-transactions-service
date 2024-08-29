@@ -65,4 +65,4 @@ jobs:
 
       - name: Shutdown Docker Compose
         run: |
-          docker-compose -f docker-compose.yml down
+          docker-compose down
