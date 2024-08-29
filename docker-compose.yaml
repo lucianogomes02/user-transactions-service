@@ -3,23 +3,33 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8
+    container_name: mysql-container
     environment:
       MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
       MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
       - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
     networks:
       - default
 
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq-container
     ports:
       - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
       - "15672:15672"
+    environment:
+      RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME: ${RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME}
+      RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME: ${RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - default
 
   transactions:
+    container_name: transactions-service-container
     build:
       context: .
       dockerfile: ./users-service/Dockerfile-users
@@ -31,13 +41,19 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      SPRING_RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      SECURITY_JWT_PUBLIC_KEY_FILE: ${SECURITY_JWT_PUBLIC_KEY_FILE}
+      SECURITY_JWT_SECRET_KEY_FILE: ${SECURITY_JWT_SECRET_KEY_FILE}
+      SECURITY_API_KEY: ${SECURITY_API_KEY}
+      RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME: ${RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME}
+      RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME: ${RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME}
     ports:
       - ${TRANSACTIONS_SERVICE_PORT}:${TRANSACTIONS_SERVICE_PORT}
     networks:
       - default
 
   users:
+    container_name: users-service-container
     build:
       context: .
       dockerfile: ./users-service/Dockerfile-users
@@ -49,12 +65,40 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      SPRING_RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      SECURITY_JWT_PUBLIC_KEY_FILE: ${SECURITY_JWT_PUBLIC_KEY_FILE}
+      SECURITY_JWT_SECRET_KEY_FILE: ${SECURITY_JWT_SECRET_KEY_FILE}
+      SECURITY_API_KEY: ${SECURITY_API_KEY}
+      RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME: ${RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME}
+      RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME: ${RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME}
     ports:
       - ${USERS_SERVICE_PORT}:${USERS_SERVICE_PORT}
+    networks:
+      - default
+
+  auth:
+    container_name: auth-service-container
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile-auth
+    restart: always
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      SECURITY_JWT_PUBLIC_KEY_FILE: ${SECURITY_JWT_PUBLIC_KEY_FILE}
+      SECURITY_JWT_SECRET_KEY_FILE: ${SECURITY_JWT_SECRET_KEY_FILE}
+      USERS_SERVICE_URL: ${USERS_SERVICE_URL}
+      SECURITY_API_KEY: ${SECURITY_API_KEY}
+    ports:
+      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
     networks:
       - default
 
 networks:
   default:
     name: user-transactions-services_default
+
+volumes:
+  mysql-data:
+  rabbitmq-data:
