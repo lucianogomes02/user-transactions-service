@@ -1,8 +1,8 @@
-package com.auth.controllers;
+package com.users.controllers;
 
-import com.auth.dto.LoginRequest;
-import com.auth.dto.LoginResponse;
-import com.auth.services.UserServiceClient;
+import com.users.domain.value_objects.LoginRequestDto;
+import com.users.domain.value_objects.LoginResponseDto;
+import com.users.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 
-@Tag(name = "Auth Token Controller", description = "Endpoint for user authentication")
+@Tag(name = "User Auth Controller", description = "Endpoint para autenticação de usuários")
 @RestController
-@RequestMapping("/auth")
-public class TokenController {
+@RequestMapping("/users/auth")
+public class UserAuthController {
     @Autowired
     private JwtEncoder jwtEncoder;
 
     @Autowired
-    private UserServiceClient userServiceClient;
+    private UserService userService;
 
-    @Operation(summary = "Login User (Generate JWT Token)")
+    @Operation(summary = "Autenticar Usuário (Gerar Token JWT)")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        var userCredentialsResponse = userServiceClient.verifyCredentials(loginRequest.username(), loginRequest.password());
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+        var userCredentialsResponse = userService.verifyCredentials(loginRequest);
         if (userCredentialsResponse == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -48,6 +48,6 @@ public class TokenController {
                 JwtEncoderParameters.from(claims)
         ).getTokenValue();
 
-        return ResponseEntity.ok(new LoginResponse(jwtToken, expiresAt.toEpochMilli()));
+        return ResponseEntity.ok(new LoginResponseDto(jwtToken, expiresAt.toEpochMilli()));
     }
 }

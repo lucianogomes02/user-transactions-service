@@ -59,8 +59,6 @@ RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME=default.user-queue
 
 SECURITY_JWT_SECRET_KEY_FILE=classpath:security.key
 SECURITY_JWT_PUBLIC_KEY_FILE=classpath:security.pub
-
-SECURITY_API_KEY=daf75259-2374-417b-b86b-27556f0ab933
 ```
 ### 3 - Gere as Chaves de Segurança
 Para isso, é necesário ter o OpenSSL instalado na sua máquina. Execute os seguintes comandos:

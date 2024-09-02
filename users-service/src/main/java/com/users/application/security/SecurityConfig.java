@@ -38,19 +38,11 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
 
-    @Value("${api.key}")
-    private String apiKey;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/users/verify").access((authentication, context) -> {
-                        HttpServletRequest request = context.getRequest();
-                        String serviceKey = request.getHeader("X-AUTH-SERVICE-KEY");
-                        boolean isAuthorized = apiKey.equals(serviceKey);
-                        return new AuthorizationDecision(isAuthorized);
-                    })
+                    .requestMatchers(HttpMethod.POST, "/users/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/users").permitAll()
                     .requestMatchers(HttpMethod.GET, "/users").authenticated()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/").permitAll()

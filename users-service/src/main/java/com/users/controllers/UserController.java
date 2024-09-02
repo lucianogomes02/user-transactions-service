@@ -1,6 +1,5 @@
 package com.users.controllers;
 
-import com.users.domain.value_objects.UserCredentialsDto;
 import com.users.domain.value_objects.UserCredentialsResponse;
 import com.users.domain.value_objects.UserPublicDto;
 import com.users.domain.value_objects.UserRecordDto;
@@ -40,12 +39,5 @@ public class UserController {
     public ResponseEntity<Iterable<UserPublicDto>> getAllUsers(JwtAuthenticationToken jwt) {
         Iterable<UserPublicDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
-    }
-
-    @Operation(summary = "Verify user credentials")
-    @PostMapping("/users/verify")
-    public ResponseEntity<UserCredentialsResponse> verifyCredentials(@RequestBody @Valid UserCredentialsDto userCredentialsDto) {
-        UserCredentialsResponse user = userService.verifyCredentials(userCredentialsDto);
-        return ResponseEntity.ok(user);
     }
 }

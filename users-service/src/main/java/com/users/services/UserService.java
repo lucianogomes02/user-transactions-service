@@ -126,9 +126,9 @@ public class UserService {
             .collect(Collectors.toList());
     }
 
-    public UserCredentialsResponse verifyCredentials(@Valid UserCredentialsDto userCredentialsDto) {
-        var user = userRepository.findByEmail(userCredentialsDto.username());
-        if (user != null && bCryptPasswordEncoder.matches(userCredentialsDto.password(), user.getPassword())) {
+    public UserCredentialsResponse verifyCredentials(@Valid LoginRequestDto loginRequestDto) {
+        var user = userRepository.findByEmail(loginRequestDto.username());
+        if (user != null && bCryptPasswordEncoder.matches(loginRequestDto.password(), user.getPassword())) {
             return new UserCredentialsResponse(
                 user.getId().toString(),
                 user.getEmail()
