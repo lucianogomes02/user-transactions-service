@@ -1,1 +1,0 @@
-ALTER TABLE tb_users DROP COLUMN wallet_funds;

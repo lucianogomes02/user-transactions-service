@@ -54,8 +54,7 @@ RABBITMQ_HOST=amqp://guest:guest@rabbitmq:5672/
 RABBITMQ_PORT=5672
 RABBITMQ_USERNAME=guest
 RABBITMQ_PASSWORD=guest
-RABBITMQ_TRANSACTION_TO_USER_QUEUE_NAME=default.transaction-queue
-RABBITMQ_USER_TO_TRANSACTION_QUEUE_NAME=default.user-queue
+RABBITMQ_TRANSACTION_QUEUE_NAME=default.transaction-queue
 
 SECURITY_JWT_SECRET_KEY_FILE=classpath:security.key
 SECURITY_JWT_PUBLIC_KEY_FILE=classpath:security.pub
