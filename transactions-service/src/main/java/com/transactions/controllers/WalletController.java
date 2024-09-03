@@ -1,9 +1,8 @@
 package com.transactions.controllers;
 
-import com.transactions.domain.aggregate.Wallet;
 import com.transactions.domain.value_objects.WalletPublicDto;
 import com.transactions.domain.value_objects.WalletRecordDto;
-import com.transactions.services.validators.WalletService;
+import com.transactions.services.WalletService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.transactions.services.validators;
+package com.transactions.services;
 
 import com.transactions.domain.aggregate.Wallet;
 import com.transactions.domain.value_objects.WalletPublicDto;
