@@ -1,5 +1,6 @@
-package com.transactions.application.exceptions;
+package com.transactions.application.exceptions.wallet;
 
+import com.transactions.application.exceptions.ExceptionDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,11 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
 
 @RestControllerAdvice
-public class TransactionControllerExceptionHandler {
-
+public class WalletControllerExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity handleEntityNotFoundException(EntityNotFoundException e) {
-        ExceptionDto exceptionDto = new ExceptionDto("Transação não encontrada", "404");
+        ExceptionDto exceptionDto = new ExceptionDto("Carteira não encontrada", "404");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
     }
 
@@ -27,19 +27,19 @@ public class TransactionControllerExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity handleDataIntegrityViolationException(DataIntegrityViolationException e) {
-        ExceptionDto exceptionDto = new ExceptionDto("Transação inválida ou já cadastrada", "400");
+        ExceptionDto exceptionDto = new ExceptionDto("Carteira inválida ou já cadastrada", "400");
         return ResponseEntity.badRequest().body(exceptionDto);
     }
 
-    @ExceptionHandler(TransactionValidationException.class)
-    public ResponseEntity handleTransactionValidationException(TransactionValidationException e) {
+    @ExceptionHandler(WalletValidationException.class)
+    public ResponseEntity handleWalletValidationException(WalletValidationException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage(), "400");
         return ResponseEntity.badRequest().body(exceptionDto);
     }
 
     @ExceptionHandler(ResourceAccessException.class)
     public ResponseEntity<ExceptionDto> handleResourceAccessException(ResourceAccessException e) {
-        var exceptionDto = new ExceptionDto("Transações temporariamente indisponíveis", "503");
+        var exceptionDto = new ExceptionDto("Carteiras temporariamente indisponíveis", "503");
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(exceptionDto);
     }
 

@@ -1,6 +1,5 @@
-package com.transactions.application.exceptions;
+package com.transactions.application.exceptions.transaction;
 
-import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.support.ListenerExecutionFailedException;
 import org.springframework.util.ErrorHandler;
 

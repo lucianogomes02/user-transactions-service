@@ -1,6 +1,6 @@
 package com.transactions.services.validators.transaction;
 
-import com.transactions.application.exceptions.TransactionValidationException;
+import com.transactions.application.exceptions.transaction.TransactionValidationException;
 import com.transactions.domain.aggregate.transaction.Transaction;
 import com.transactions.domain.specifications.transaction.SenderAndReceiverAreNotTheSame;
 import com.transactions.domain.specifications.transaction.TransactionSpecification;

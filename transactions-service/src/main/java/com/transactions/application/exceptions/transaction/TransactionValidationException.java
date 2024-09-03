@@ -1,4 +1,4 @@
-package com.transactions.application.exceptions;
+package com.transactions.application.exceptions.transaction;
 
 public class TransactionValidationException extends RuntimeException {
     public TransactionValidationException(String message) {

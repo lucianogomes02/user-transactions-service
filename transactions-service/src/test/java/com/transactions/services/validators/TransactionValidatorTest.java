@@ -1,6 +1,6 @@
 //package com.transactions.services.validators;
 //
-//import com.transactions.application.exceptions.TransactionValidationException;
+//import com.transactions.application.exceptions.transaction.TransactionValidationException;
 //import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSame;
 //import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
 //import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
