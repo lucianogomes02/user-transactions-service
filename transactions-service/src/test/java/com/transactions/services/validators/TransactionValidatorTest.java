@@ -5,12 +5,13 @@ import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSam
 import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
 import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
 import com.transactions.domain.value_objects.TransactionStatus;
+import com.transactions.services.validators.transaction.TransactionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import com.transactions.domain.aggregate.Transaction;
-import com.transactions.domain.specifications.transaction.Specification;
+import com.transactions.domain.specifications.transaction.TransactionSpecification;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -25,13 +26,13 @@ import static org.mockito.Mockito.*;
 @PrepareForTest(TransactionValidator.class)
 public class TransactionValidatorTest {
     @Mock
-    private Specification<Transaction> TransactionAmountIsValid;
+    private TransactionSpecification<Transaction> TransactionAmountIsValid;
 
     @Mock
-    private Specification<Transaction> TransactionIsProcessing;
+    private TransactionSpecification<Transaction> TransactionIsProcessing;
 
     @Mock
-    private Specification<Transaction> SenderAndReceiverAreNotTheSame;
+    private TransactionSpecification<Transaction> SenderAndReceiverAreNotTheSame;
 
     @InjectMocks
     private TransactionValidator transactionValidator;
@@ -40,11 +41,11 @@ public class TransactionValidatorTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        List<Specification<Transaction>> specifications = new ArrayList<>();
-        specifications.add(TransactionAmountIsValid);
-        specifications.add(TransactionIsProcessing);
-        specifications.add(SenderAndReceiverAreNotTheSame);
-        transactionValidator.transactionSpecifications = specifications;
+        List<TransactionSpecification<Transaction>> transactionSpecifications = new ArrayList<>();
+        transactionSpecifications.add(TransactionAmountIsValid);
+        transactionSpecifications.add(TransactionIsProcessing);
+        transactionSpecifications.add(SenderAndReceiverAreNotTheSame);
+        transactionValidator.transactionTransactionSpecifications = transactionSpecifications;
 
         when(TransactionAmountIsValid.isSatisfiedBy(any(Transaction.class))).thenReturn(true);
         when(TransactionIsProcessing.isSatisfiedBy(any(Transaction.class))).thenReturn(true);
@@ -71,13 +72,13 @@ public class TransactionValidatorTest {
         transaction.setStatus(TransactionStatus.PROCESSING);
 
         TransactionValidator spyValidator = spy(new TransactionValidator());
-        List<Specification<Transaction>> specifications = new ArrayList<>();
-        specifications.add(TransactionAmountIsValid);
-        specifications.add(TransactionIsProcessing);
-        specifications.add(SenderAndReceiverAreNotTheSame);
-        spyValidator.transactionSpecifications = specifications;
+        List<TransactionSpecification<Transaction>> transactionSpecifications = new ArrayList<>();
+        transactionSpecifications.add(TransactionAmountIsValid);
+        transactionSpecifications.add(TransactionIsProcessing);
+        transactionSpecifications.add(SenderAndReceiverAreNotTheSame);
+        spyValidator.transactionTransactionSpecifications = transactionSpecifications;
 
-        when(spyValidator.transactionSpecifications.get(0).isSatisfiedBy(transaction)).thenReturn(false);
+        when(spyValidator.transactionTransactionSpecifications.get(0).isSatisfiedBy(transaction)).thenReturn(false);
         when(spyValidator.getValidationMessageStrategy(TransactionAmountIsValid)).thenReturn(new TransactionAmountNotValid());
 
         TransactionValidationException thrown = assertThrows(
@@ -97,13 +98,13 @@ public class TransactionValidatorTest {
         transaction.setStatus(TransactionStatus.SUCCEEDED);
 
         TransactionValidator spyValidator = spy(new TransactionValidator());
-        List<Specification<Transaction>> specifications = new ArrayList<>();
-        specifications.add(TransactionAmountIsValid);
-        specifications.add(TransactionIsProcessing);
-        specifications.add(SenderAndReceiverAreNotTheSame);
-        spyValidator.transactionSpecifications = specifications;
+        List<TransactionSpecification<Transaction>> transactionSpecifications = new ArrayList<>();
+        transactionSpecifications.add(TransactionAmountIsValid);
+        transactionSpecifications.add(TransactionIsProcessing);
+        transactionSpecifications.add(SenderAndReceiverAreNotTheSame);
+        spyValidator.transactionTransactionSpecifications = transactionSpecifications;
 
-        when(spyValidator.transactionSpecifications.get(1).isSatisfiedBy(transaction)).thenReturn(false);
+        when(spyValidator.transactionTransactionSpecifications.get(1).isSatisfiedBy(transaction)).thenReturn(false);
         when(spyValidator.getValidationMessageStrategy(TransactionIsProcessing)).thenReturn(new TransactionIsNotProcessing());
 
         TransactionValidationException thrown = assertThrows(
@@ -124,13 +125,13 @@ public class TransactionValidatorTest {
         transaction.setStatus(TransactionStatus.PROCESSING);
 
         TransactionValidator spyValidator = spy(new TransactionValidator());
-        List<Specification<Transaction>> specifications = new ArrayList<>();
-        specifications.add(TransactionAmountIsValid);
-        specifications.add(TransactionIsProcessing);
-        specifications.add(SenderAndReceiverAreNotTheSame);
-        spyValidator.transactionSpecifications = specifications;
+        List<TransactionSpecification<Transaction>> transactionSpecifications = new ArrayList<>();
+        transactionSpecifications.add(TransactionAmountIsValid);
+        transactionSpecifications.add(TransactionIsProcessing);
+        transactionSpecifications.add(SenderAndReceiverAreNotTheSame);
+        spyValidator.transactionTransactionSpecifications = transactionSpecifications;
 
-        when(spyValidator.transactionSpecifications.get(2).isSatisfiedBy(transaction)).thenReturn(false);
+        when(spyValidator.transactionTransactionSpecifications.get(2).isSatisfiedBy(transaction)).thenReturn(false);
         when(spyValidator.getValidationMessageStrategy(SenderAndReceiverAreNotTheSame)).thenReturn(new SenderAndReceiverAreTheSame());
 
         TransactionValidationException thrown = assertThrows(

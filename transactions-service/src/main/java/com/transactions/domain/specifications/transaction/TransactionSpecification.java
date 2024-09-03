@@ -1,5 +1,5 @@
 package com.transactions.domain.specifications.transaction;
 
-public interface Specification <T> {
+public interface TransactionSpecification<T> {
     boolean isSatisfiedBy(T t);
 }

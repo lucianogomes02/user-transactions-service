@@ -1,4 +1,4 @@
-package com.transactions.domain.strategies.transaction;
+package com.transactions.domain.strategies;
 
 public interface ValidationMessageStrategy {
     String getMessage();

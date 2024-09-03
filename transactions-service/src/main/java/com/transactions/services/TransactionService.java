@@ -6,8 +6,7 @@ import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;
 import com.transactions.services.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
-import com.transactions.services.validators.ProcessTransactionValidator;
-import com.transactions.services.validators.TransactionValidator;
+import com.transactions.services.validators.transaction.TransactionValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,6 @@ public class TransactionService {
 
     @Autowired
     private TransactionValidator transactionValidator;
-
-    @Autowired
-    private ProcessTransactionValidator processTransactionValidator;
 
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto, String currentUserId) {
@@ -48,17 +44,6 @@ public class TransactionService {
         );
         transactionProducer.publishTransactionMessage(transactionDto);
         return transactionDto;
-    }
-
-    @Transactional
-    public void proccessTransaction(TransactionPublicDto transactionPublicDto) {
-        var transaction = transactionRepository.findById(UUID.fromString(transactionPublicDto.id()));
-
-        if (transaction.isPresent()) {
-            var onGoingTransaction = transaction.get();
-            processTransactionValidator.validate(onGoingTransaction);
-            onGoingTransaction.setStatus(TransactionStatus.valueOf(transactionPublicDto.status()));
-        }
     }
 
     public List<TransactionPublicDto> getTransactions() {
