@@ -1,4 +1,4 @@
-package com.transactions.controllers;
+package com.transactions.controllers.wallet;
 
 import com.transactions.domain.value_objects.WalletPublicDto;
 import com.transactions.domain.value_objects.WalletRecordDto;
