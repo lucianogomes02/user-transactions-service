@@ -1,2 +1,0 @@
-ALTER TABLE tb_transactions ADD CONSTRAINT fk_sender FOREIGN KEY (sender_id) REFERENCES tb_users(id);
-ALTER TABLE tb_transactions ADD CONSTRAINT fk_receiver FOREIGN KEY (receiver_id) REFERENCES tb_users(id);
