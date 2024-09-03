@@ -59,7 +59,6 @@ public class WalletService {
             transactionService.updateTransactionStatus(TransactionStatus.SUCCEEDED, transactionPublicDto.id());
         } catch (Exception e) {
             transactionService.updateTransactionStatus(TransactionStatus.FAILED, transactionPublicDto.id());
-            throw e;
         }
     }
 
