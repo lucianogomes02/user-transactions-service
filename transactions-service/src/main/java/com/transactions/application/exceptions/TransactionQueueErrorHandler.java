@@ -18,6 +18,6 @@ public class TransactionQueueErrorHandler implements ErrorHandler {
         System.out.println("===========================================");
 
         // Logar no Google Cloud Observability ou no Datadog por exemplo.
-        throw new AmqpRejectAndDontRequeueException(error);
+        // throw new AmqpRejectAndDontRequeueException(error);
     }
 }
