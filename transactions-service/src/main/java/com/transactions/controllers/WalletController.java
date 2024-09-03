@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Wallet Controller", description = "Endpoints for wallets")
 @RestController
@@ -32,6 +29,16 @@ public class WalletController {
     ) {
         String currentUserId = jwt.getToken().getClaimAsString("sub");
         WalletPublicDto wallet =  walletService.createWallet(walletRecordDto, currentUserId);
+        return ResponseEntity.ok(wallet);
+    }
+
+    @Operation(summary = "Get wallet for current authenticated user")
+    @GetMapping
+    public ResponseEntity<WalletPublicDto> getWallet(
+            JwtAuthenticationToken jwt
+    ) {
+        String currentUserId = jwt.getToken().getClaimAsString("sub");
+        WalletPublicDto wallet = walletService.getWallet(currentUserId);
         return ResponseEntity.ok(wallet);
     }
 }

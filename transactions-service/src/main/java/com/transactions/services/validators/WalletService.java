@@ -31,4 +31,14 @@ public class WalletService {
             wallet.getCreatedAt().toString()
         );
     }
+
+    public WalletPublicDto getWallet(String currentUserId) {
+        var wallet = walletRepository.findByUserId(UUID.fromString(currentUserId));
+        return new WalletPublicDto(
+            wallet.getId().toString(),
+            wallet.getUserId().toString(),
+            wallet.getBalance().toString(),
+            wallet.getCreatedAt().toString()
+        );
+    }
 }
