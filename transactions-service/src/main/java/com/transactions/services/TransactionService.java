@@ -46,6 +46,13 @@ public class TransactionService {
         return transactionDto;
     }
 
+    @Transactional
+    public void updateTransactionStatus(TransactionStatus transactionStatus, String transactionId) {
+        var transaction = transactionRepository.findById(UUID.fromString(transactionId)).orElseThrow();
+        transaction.setStatus(transactionStatus);
+        transactionRepository.save(transaction);
+    }
+
     public List<TransactionPublicDto> getTransactions() {
         return transactionRepository.findAll().stream()
             .map(transaction -> new TransactionPublicDto(

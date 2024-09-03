@@ -8,7 +8,6 @@ import com.transactions.domain.specifications.wallet.WalletSpecification;
 import com.transactions.domain.strategies.ValidationMessageStrategy;
 import com.transactions.domain.strategies.wallet.SenderUserDontHaveEnoughWalletBalance;
 import com.transactions.domain.strategies.wallet.UsersDontHaveAWallet;
-import com.transactions.services.validators.Validator;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class WalletValidator implements Validator<Wallet> {
+public class WalletValidator implements AbstractWalletValidator<Wallet> {
     @Autowired
     protected List<WalletSpecification<Wallet>> walletSpecifications;
 
@@ -28,10 +27,10 @@ public class WalletValidator implements Validator<Wallet> {
     }
 
     @Override
-    public void validate(Wallet wallet) {
+    public void validate(Wallet wallet1, Wallet wallet2, Double amount) {
         walletSpecifications.forEach(
             walletSpecification -> {
-                if (!walletSpecification.isSatisfiedBy(wallet)) {
+                if (!walletSpecification.isSatisfiedBy(wallet1, wallet2, amount)) {
                     throw new WalletValidationException(
                             Objects.requireNonNull(
                                     getValidationMessageStrategy(walletSpecification)).getMessage()

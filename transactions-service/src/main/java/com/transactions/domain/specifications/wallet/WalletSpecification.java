@@ -12,4 +12,8 @@ public interface WalletSpecification<T extends Wallet> {
     default boolean isSatisfiedBy(T receiverWallet, T senderWallet) {
         return isSatisfiedBy(receiverWallet) && isSatisfiedBy(senderWallet);
     }
+
+    default boolean isSatisfiedBy(T receiverWallet, T senderWallet, Double amount) {
+        return isSatisfiedBy(receiverWallet, senderWallet) && senderWallet.getBalance() >= amount;
+    }
 }

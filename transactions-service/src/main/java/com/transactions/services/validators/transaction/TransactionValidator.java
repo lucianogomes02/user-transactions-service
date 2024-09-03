@@ -10,7 +10,6 @@ import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSam
 import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
 import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
 import com.transactions.domain.strategies.ValidationMessageStrategy;
-import com.transactions.services.validators.Validator;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class TransactionValidator implements Validator<Transaction> {
+public class TransactionValidator implements AbstractTransactionValidator<Transaction> {
     @Autowired
     protected List<TransactionSpecification<Transaction>> transactionTransactionSpecifications;
 
