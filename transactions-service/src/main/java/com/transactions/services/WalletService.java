@@ -54,7 +54,8 @@ public class WalletService {
             senderWallet.setUpdatedAt(LocalDateTime.now());
             receiverWallet.setBalance(receiverNewBalance);
             receiverWallet.setUpdatedAt(LocalDateTime.now());
-            walletRepository.saveAll(new Wallet[]{senderWallet, receiverWallet});
+            walletRepository.save(senderWallet);
+            walletRepository.save(receiverWallet);
             transactionService.updateTransactionStatus(TransactionStatus.SUCCEEDED, transactionPublicDto.id());
         } catch (Exception e) {
             transactionService.updateTransactionStatus(TransactionStatus.FAILED, transactionPublicDto.id());
