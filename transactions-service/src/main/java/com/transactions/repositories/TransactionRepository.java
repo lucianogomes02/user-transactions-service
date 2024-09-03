@@ -1,6 +1,6 @@
 package com.transactions.repositories;
 
-import com.transactions.domain.aggregate.Transaction;
+import com.transactions.domain.aggregate.transaction.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package com.transactions.services;
 
-import com.transactions.domain.aggregate.Wallet;
+import com.transactions.domain.aggregate.wallet.Wallet;
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionStatus;
 import com.transactions.domain.value_objects.WalletPublicDto;

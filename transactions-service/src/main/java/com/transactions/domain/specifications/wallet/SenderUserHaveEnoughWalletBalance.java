@@ -1,6 +1,6 @@
 package com.transactions.domain.specifications.wallet;
 
-import com.transactions.domain.aggregate.Wallet;
+import com.transactions.domain.aggregate.wallet.Wallet;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package com.transactions.domain.aggregate;
+package com.transactions.domain.aggregate.transaction;
 
 import com.transactions.domain.value_objects.TransactionStatus;
 import jakarta.persistence.*;

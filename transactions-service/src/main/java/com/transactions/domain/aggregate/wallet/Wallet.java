@@ -1,4 +1,4 @@
-package com.transactions.domain.aggregate;
+package com.transactions.domain.aggregate.wallet;
 
 import jakarta.persistence.*;
 import lombok.*;

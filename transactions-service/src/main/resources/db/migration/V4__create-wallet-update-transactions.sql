@@ -8,4 +8,4 @@ CREATE TABLE tb_wallet (
     PRIMARY KEY (id),
 );
 
-ALTER TABLE tb_wallet CREATE COLUMN updated_at TIMESTAMP NOT NULL;
+ALTER TABLE tb_transactions CREATE COLUMN updated_at TIMESTAMP NOT NULL;

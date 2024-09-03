@@ -1,6 +1,6 @@
 package com.transactions.services;
 
-import com.transactions.domain.aggregate.Transaction;
+import com.transactions.domain.aggregate.transaction.Transaction;
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;

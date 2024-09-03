@@ -1,7 +1,7 @@
 package com.transactions.services.validators.wallet;
 
 import com.transactions.application.exceptions.WalletValidationException;
-import com.transactions.domain.aggregate.Wallet;
+import com.transactions.domain.aggregate.wallet.Wallet;
 import com.transactions.domain.specifications.wallet.SenderUserHaveEnoughWalletBalance;
 import com.transactions.domain.specifications.wallet.UsersHaveAWallet;
 import com.transactions.domain.specifications.wallet.WalletSpecification;
