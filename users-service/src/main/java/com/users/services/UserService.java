@@ -30,19 +30,15 @@ public class UserService {
     @Transactional
     public UserPublicDto createUser(UserRecordDto userRecordDto) {
         var user = new User(
-            UUID.randomUUID(),
             userRecordDto.name(),
             userRecordDto.email(),
             bCryptPasswordEncoder.encode(userRecordDto.password()),
-            userRecordDto.cpf(),
-            LocalDateTime.now(),
-            LocalDateTime.now(),
-            true
+            userRecordDto.cpf()
         );
         userValidator.validate(user);
         user = userRepository.save(user);
         return new UserPublicDto(
-            user.getId().toString(),
+            user.getId(),
             user.getName(),
             user.getEmail(),
             user.getCpf(),
@@ -54,7 +50,7 @@ public class UserService {
     public List<UserPublicDto> getAllUsers() {
         return userRepository.findAll().stream()
             .map(user -> new UserPublicDto(
-                user.getId().toString(),
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getCpf(),
@@ -68,7 +64,7 @@ public class UserService {
         var user = userRepository.findByEmail(loginRequestDto.username());
         if (user != null && bCryptPasswordEncoder.matches(loginRequestDto.password(), user.getPassword())) {
             return new UserCredentialsResponse(
-                user.getId().toString(),
+                user.getId(),
                 user.getEmail()
             );
         }

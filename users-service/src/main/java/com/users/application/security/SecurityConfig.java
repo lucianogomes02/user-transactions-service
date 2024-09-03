@@ -59,7 +59,7 @@ public class SecurityConfig {
         JWK jwk = new RSAKey.Builder(this.publicKey)
                 .privateKey(this.privateKey)
                 .keyUse(KeyUse.SIGNATURE)
-                .keyID("auth-service")
+                .keyID("users-service")
                 .build();
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
