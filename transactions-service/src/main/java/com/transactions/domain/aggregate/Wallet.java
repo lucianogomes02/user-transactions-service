@@ -18,15 +18,15 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, unique = true, updatable = false)
     private UUID userId;
 
     @Column(name = "balance", nullable = false)
     private Double balance;
 
-    @Column(name="created_at")
+    @Column(name="created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name="updated_at")
+    @Column(name="updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

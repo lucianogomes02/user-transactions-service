@@ -1,6 +1,6 @@
 CREATE TABLE tb_wallet (
     id UUID PRIMARY KEY,
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL UNIQUE,
     balance DECIMAL(19, 2) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
