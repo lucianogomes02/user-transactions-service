@@ -30,9 +30,6 @@ public class User {
     @Column(name = "cpf", unique = true)
     private String cpf;
 
-    @Column(name = "wallet_funds")
-    private Double walletFunds = 0.00;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 

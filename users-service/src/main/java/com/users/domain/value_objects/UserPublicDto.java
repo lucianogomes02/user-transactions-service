@@ -5,7 +5,6 @@ public record UserPublicDto(
         String name,
         String email,
         String cpf,
-        String walletFunds,
         String createdAt,
         String updatedAt
 ) {

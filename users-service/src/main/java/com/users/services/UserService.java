@@ -35,7 +35,6 @@ public class UserService {
             userRecordDto.email(),
             bCryptPasswordEncoder.encode(userRecordDto.password()),
             userRecordDto.cpf(),
-            userRecordDto.walletFunds(),
             LocalDateTime.now(),
             LocalDateTime.now(),
             true
@@ -47,7 +46,6 @@ public class UserService {
             user.getName(),
             user.getEmail(),
             user.getCpf(),
-            user.getWalletFunds().toString(),
             user.getCreatedAt().toString(),
             user.getUpdatedAt().toString()
         );
@@ -60,7 +58,6 @@ public class UserService {
                 user.getName(),
                 user.getEmail(),
                 user.getCpf(),
-                user.getWalletFunds().toString(),
                 user.getCreatedAt().toString(),
                 user.getUpdatedAt().toString()
             ))

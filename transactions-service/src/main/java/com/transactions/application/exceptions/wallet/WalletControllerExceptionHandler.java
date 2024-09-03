@@ -31,6 +31,12 @@ public class WalletControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDto);
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity handleNullPointerException(NullPointerException e) {
+        ExceptionDto exceptionDto = new ExceptionDto("Carteira não encontrada", "404");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
+    }
+
     @ExceptionHandler(WalletValidationException.class)
     public ResponseEntity handleWalletValidationException(WalletValidationException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage(), "400");

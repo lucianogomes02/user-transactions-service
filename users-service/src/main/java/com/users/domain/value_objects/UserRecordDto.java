@@ -13,8 +13,6 @@ public record UserRecordDto(
         String password,
 
         @NotBlank
-        String cpf,
-
-        Double walletFunds
+        String cpf
 ) {
 }
