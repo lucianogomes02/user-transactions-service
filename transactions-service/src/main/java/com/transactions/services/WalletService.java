@@ -28,7 +28,7 @@ public class WalletService {
     @Transactional
     public WalletPublicDto createWallet(WalletRecordDto walletRecordDto, String currentUserId) {
         var wallet = new Wallet();
-        wallet.setUserId(UUID.fromString(currentUserId));
+        wallet.setUserId(currentUserId);
         wallet.setBalance(Double.valueOf(walletRecordDto.balance()));
         wallet.setCreatedAt(LocalDateTime.now());
         wallet.setUpdatedAt(LocalDateTime.now());
@@ -44,8 +44,8 @@ public class WalletService {
     @Transactional
     public void updateUserWalletBalance(TransactionPublicDto transactionPublicDto) {
         try {
-            var senderWallet = walletRepository.findByUserId(UUID.fromString(transactionPublicDto.senderId()));
-            var receiverWallet = walletRepository.findByUserId(UUID.fromString(transactionPublicDto.receiverId()));
+            var senderWallet = walletRepository.findByUserId(transactionPublicDto.senderId());
+            var receiverWallet = walletRepository.findByUserId(transactionPublicDto.receiverId());
             walletValidator.validate(senderWallet, receiverWallet, Double.parseDouble(transactionPublicDto.amount()));
 
             var receiverNewBalance = receiverWallet.getBalance() + Double.parseDouble(transactionPublicDto.amount());
@@ -63,10 +63,10 @@ public class WalletService {
     }
 
     public WalletPublicDto getWallet(String currentUserId) {
-        var wallet = walletRepository.findByUserId(UUID.fromString(currentUserId));
+        var wallet = walletRepository.findByUserId(currentUserId);
         return new WalletPublicDto(
             wallet.getId().toString(),
-            wallet.getUserId().toString(),
+            wallet.getUserId(),
             wallet.getBalance().toString(),
             wallet.getCreatedAt().toString()
         );

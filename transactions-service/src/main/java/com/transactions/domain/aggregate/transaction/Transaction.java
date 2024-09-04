@@ -19,11 +19,11 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "sender_id", nullable = false)
-    private UUID senderId;
+    @Column(name = "sender_id", nullable = false, unique = true, updatable = false)
+    private String senderId;
 
-    @Column(name = "receiver_id", nullable = false)
-    private UUID receiverId;
+    @Column(name = "receiver_id", nullable = false, unique = true, updatable = false)
+    private String receiverId;
 
     @Column(name="amount", nullable = false)
     private Double amount;

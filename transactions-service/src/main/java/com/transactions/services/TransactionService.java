@@ -28,16 +28,16 @@ public class TransactionService {
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto, String currentUserId) {
         var transaction = new Transaction();
-        transaction.setSenderId(UUID.fromString(currentUserId));
-        transaction.setReceiverId(UUID.fromString(transactionRecordDto.receiverId()));
+        transaction.setSenderId(currentUserId);
+        transaction.setReceiverId(transactionRecordDto.receiverId());
         transaction.setAmount(Double.valueOf(transactionRecordDto.amount()));
         transactionValidator.validate(transaction);
 
         transaction = transactionRepository.save(transaction);
         var transactionDto = new TransactionPublicDto(
             transaction.getId().toString(),
-            transaction.getSenderId().toString(),
-            transaction.getReceiverId().toString(),
+            transaction.getSenderId(),
+            transaction.getReceiverId(),
             transaction.getAmount().toString(),
             transaction.getStatus().toString(),
             transaction.getCreatedAt().toString()
@@ -57,8 +57,8 @@ public class TransactionService {
         return transactionRepository.findAll().stream()
             .map(transaction -> new TransactionPublicDto(
                 transaction.getId().toString(),
-                transaction.getSenderId().toString(),
-                transaction.getReceiverId().toString(),
+                transaction.getSenderId(),
+                transaction.getReceiverId(),
                 transaction.getAmount().toString(),
                 transaction.getStatus().toString(),
                 transaction.getCreatedAt().toString()

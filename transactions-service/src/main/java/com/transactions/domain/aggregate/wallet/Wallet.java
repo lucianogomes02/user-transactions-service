@@ -19,7 +19,7 @@ public class Wallet {
     private UUID id;
 
     @Column(name = "user_id", nullable = false, unique = true, updatable = false)
-    private UUID userId;
+    private String userId;
 
     @Column(name = "balance", nullable = false)
     private Double balance;
