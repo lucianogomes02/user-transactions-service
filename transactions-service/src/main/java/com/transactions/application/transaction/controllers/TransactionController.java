@@ -1,4 +1,4 @@
-package com.transactions.controllers.transaction;
+package com.transactions.application.transaction.controllers;
 
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionRecordDto;

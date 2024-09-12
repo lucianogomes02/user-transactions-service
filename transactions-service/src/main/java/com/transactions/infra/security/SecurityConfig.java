@@ -1,4 +1,4 @@
-package com.transactions.application.security;
+package com.transactions.infra.security;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;

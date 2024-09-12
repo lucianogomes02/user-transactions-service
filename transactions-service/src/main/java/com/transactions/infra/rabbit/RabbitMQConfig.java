@@ -1,7 +1,7 @@
-package com.transactions.application.rabbit;
+package com.transactions.infra.rabbit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.transactions.application.exceptions.transaction.TransactionQueueErrorHandler;
+import com.transactions.application.transaction.exceptions.TransactionQueueErrorHandler;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;

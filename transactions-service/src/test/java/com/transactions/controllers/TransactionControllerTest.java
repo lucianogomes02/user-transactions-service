@@ -2,7 +2,7 @@ package com.transactions.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactions.TestSecurityConfig;
-import com.transactions.controllers.transaction.TransactionController;
+import com.transactions.application.transaction.controllers.TransactionController;
 import com.transactions.domain.value_objects.TransactionPublicDto;
 import com.transactions.domain.value_objects.TransactionRecordDto;
 import com.transactions.domain.value_objects.TransactionStatus;

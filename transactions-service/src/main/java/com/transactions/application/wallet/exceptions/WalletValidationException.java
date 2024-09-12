@@ -1,4 +1,4 @@
-package com.transactions.application.exceptions.wallet;
+package com.transactions.application.wallet.exceptions;
 
 public class WalletValidationException extends RuntimeException {
     public WalletValidationException(String message) {

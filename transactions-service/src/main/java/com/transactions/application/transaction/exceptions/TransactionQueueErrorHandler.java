@@ -1,4 +1,4 @@
-package com.transactions.application.exceptions.transaction;
+package com.transactions.application.transaction.exceptions;
 
 import org.springframework.amqp.rabbit.support.ListenerExecutionFailedException;
 import org.springframework.util.ErrorHandler;

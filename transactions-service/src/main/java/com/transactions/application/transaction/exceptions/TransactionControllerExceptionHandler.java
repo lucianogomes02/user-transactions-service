@@ -1,6 +1,6 @@
-package com.transactions.application.exceptions.transaction;
+package com.transactions.application.transaction.exceptions;
 
-import com.transactions.application.exceptions.ExceptionDto;
+import com.transactions.infra.exception.ExceptionDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

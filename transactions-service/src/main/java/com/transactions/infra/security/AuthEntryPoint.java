@@ -1,4 +1,4 @@
-package com.transactions.application.security;
+package com.transactions.infra.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
