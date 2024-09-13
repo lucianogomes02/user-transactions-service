@@ -1,15 +1,15 @@
 package com.transactions.services.validators.transaction;
 
 import com.transactions.application.transaction.exceptions.TransactionValidationException;
-import com.transactions.domain.aggregate.transaction.Transaction;
-import com.transactions.domain.specifications.transaction.SenderAndReceiverAreNotTheSame;
-import com.transactions.domain.specifications.transaction.TransactionSpecification;
-import com.transactions.domain.specifications.transaction.TransactionAmountIsValid;
-import com.transactions.domain.specifications.transaction.TransactionIsProcessing;
-import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSame;
-import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
-import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
-import com.transactions.domain.strategies.ValidationMessageStrategy;
+import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.specifications.SenderAndReceiverAreNotTheSame;
+import com.transactions.domain.transaction.specifications.TransactionSpecification;
+import com.transactions.domain.transaction.specifications.TransactionAmountIsValid;
+import com.transactions.domain.transaction.specifications.TransactionIsProcessing;
+import com.transactions.domain.transaction.strategies.SenderAndReceiverAreTheSame;
+import com.transactions.domain.transaction.strategies.TransactionAmountNotValid;
+import com.transactions.domain.transaction.strategies.TransactionIsNotProcessing;
+import com.transactions.libs.ValidationMessageStrategy;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,9 @@
 package com.transactions.services;
 
-import com.transactions.domain.aggregate.transaction.Transaction;
-import com.transactions.domain.value_objects.TransactionPublicDto;
-import com.transactions.domain.value_objects.TransactionRecordDto;
-import com.transactions.domain.value_objects.TransactionStatus;
+import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
+import com.transactions.domain.transaction.value_objects.TransactionRecordDto;
+import com.transactions.domain.transaction.value_objects.TransactionStatus;
 import com.transactions.services.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
 import com.transactions.services.validators.transaction.TransactionValidator;

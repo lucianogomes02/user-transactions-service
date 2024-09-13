@@ -1,7 +1,6 @@
 package com.transactions.services.consumers;
 
-import com.transactions.domain.value_objects.TransactionPublicDto;
-import com.transactions.services.TransactionService;
+import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
 import com.transactions.services.WalletService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

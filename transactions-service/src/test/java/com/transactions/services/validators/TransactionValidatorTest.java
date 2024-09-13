@@ -1,17 +1,17 @@
 //package com.transactions.services.validators;
 //
 //import com.transactions.application.transaction.exceptions.TransactionValidationException;
-//import com.transactions.domain.strategies.transaction.SenderAndReceiverAreTheSame;
-//import com.transactions.domain.strategies.transaction.TransactionAmountNotValid;
-//import com.transactions.domain.strategies.transaction.TransactionIsNotProcessing;
-//import com.transactions.domain.value_objects.TransactionStatus;
+//import com.transactions.domain.transaction.strategies.SenderAndReceiverAreTheSame;
+//import com.transactions.domain.transaction.strategies.TransactionAmountNotValid;
+//import com.transactions.domain.transaction.strategies.TransactionIsNotProcessing;
+//import com.transactions.domain.transaction.value_objects.TransactionStatus;
 //import com.transactions.services.validators.transaction.TransactionValidator;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.MockitoAnnotations;
 //import org.powermock.core.classloader.annotations.PrepareForTest;
-//import com.transactions.domain.aggregate.transaction.Transaction;
-//import com.transactions.domain.specifications.transaction.TransactionSpecification;
+//import com.transactions.domain.transaction.entities.Transaction;
+//import com.transactions.domain.transaction.specifications.TransactionSpecification;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mock;
 //

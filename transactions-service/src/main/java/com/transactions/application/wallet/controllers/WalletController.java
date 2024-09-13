@@ -1,7 +1,7 @@
 package com.transactions.application.wallet.controllers;
 
-import com.transactions.domain.value_objects.WalletPublicDto;
-import com.transactions.domain.value_objects.WalletRecordDto;
+import com.transactions.domain.wallet.value_objects.WalletPublicDto;
+import com.transactions.domain.wallet.value_objects.WalletRecordDto;
 import com.transactions.services.WalletService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
