@@ -1,13 +1,13 @@
-package com.transactions.services.validators.wallet;
+package com.transactions.domain.wallet.validators;
 
 import com.transactions.application.wallet.exceptions.WalletValidationException;
 import com.transactions.domain.wallet.entities.Wallet;
 import com.transactions.domain.wallet.specifications.SenderUserHaveEnoughWalletBalance;
 import com.transactions.domain.wallet.specifications.UsersHaveAWallet;
 import com.transactions.domain.wallet.specifications.WalletSpecification;
-import com.transactions.libs.ValidationMessageStrategy;
 import com.transactions.domain.wallet.strategies.SenderUserDontHaveEnoughWalletBalance;
 import com.transactions.domain.wallet.strategies.UsersDontHaveAWallet;
+import com.transactions.libs.ValidationMessageStrategy;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

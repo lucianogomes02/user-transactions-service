@@ -5,7 +5,7 @@
 //import com.transactions.domain.transaction.strategies.TransactionAmountNotValid;
 //import com.transactions.domain.transaction.strategies.TransactionIsNotProcessing;
 //import com.transactions.domain.transaction.value_objects.TransactionStatus;
-//import com.transactions.services.validators.transaction.TransactionValidator;
+//import com.transactions.domain.transaction.validators.TransactionValidator;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.MockitoAnnotations;

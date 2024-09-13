@@ -1,19 +1,19 @@
 package com.transactions.domain.transaction.specifications;
 
-import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.aggregate.TransactionAggregate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SenderAndReceiverAreNotTheSame implements TransactionSpecification<Transaction> {
+public class SenderAndReceiverAreNotTheSame implements TransactionSpecification<TransactionAggregate> {
     @Override
-    public boolean isSatisfiedBy(Transaction transaction) {
+    public boolean isSatisfiedBy(TransactionAggregate transaction) {
         return !transaction
-                .getSenderId()
-                .toString()
+                .getSenderWallet()
+                .getUserId()
                 .equals(
                         transaction
-                                .getReceiverId()
-                                .toString()
+                                .getReceiverWallet()
+                                .getUserId()
                 );
     }
 }

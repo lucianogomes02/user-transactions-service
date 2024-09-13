@@ -1,4 +1,4 @@
-package com.transactions.services.validators.wallet;
+package com.transactions.domain.wallet.validators;
 
 import com.transactions.domain.wallet.entities.Wallet;
 

@@ -1,12 +1,12 @@
 package com.transactions.domain.transaction.specifications;
 
-import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.aggregate.TransactionAggregate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionAmountIsValid implements TransactionSpecification<Transaction> {
+public class TransactionAmountIsValid implements TransactionSpecification<TransactionAggregate> {
     @Override
-    public boolean isSatisfiedBy(Transaction transaction) {
+    public boolean isSatisfiedBy(TransactionAggregate transaction) {
         return transaction.getAmount() > 0;
     }
 }

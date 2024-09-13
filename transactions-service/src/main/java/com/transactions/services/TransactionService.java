@@ -1,15 +1,16 @@
 package com.transactions.services;
 
 import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.validators.TransactionValidator;
 import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
 import com.transactions.domain.transaction.value_objects.TransactionRecordDto;
 import com.transactions.domain.transaction.value_objects.TransactionStatus;
-import com.transactions.services.producers.TransactionProducer;
 import com.transactions.repositories.TransactionRepository;
-import com.transactions.services.validators.transaction.TransactionValidator;
+import com.transactions.services.producers.TransactionProducer;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

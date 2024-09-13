@@ -1,11 +1,11 @@
-package com.transactions.services.validators.transaction;
+package com.transactions.domain.transaction.validators;
 
 import com.transactions.application.transaction.exceptions.TransactionValidationException;
-import com.transactions.domain.transaction.entities.Transaction;
+import com.transactions.domain.transaction.aggregate.TransactionAggregate;
 import com.transactions.domain.transaction.specifications.SenderAndReceiverAreNotTheSame;
-import com.transactions.domain.transaction.specifications.TransactionSpecification;
 import com.transactions.domain.transaction.specifications.TransactionAmountIsValid;
 import com.transactions.domain.transaction.specifications.TransactionIsProcessing;
+import com.transactions.domain.transaction.specifications.TransactionSpecification;
 import com.transactions.domain.transaction.strategies.SenderAndReceiverAreTheSame;
 import com.transactions.domain.transaction.strategies.TransactionAmountNotValid;
 import com.transactions.domain.transaction.strategies.TransactionIsNotProcessing;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class TransactionValidator implements AbstractTransactionValidator<Transaction> {
+public class TransactionValidator implements AbstractTransactionValidator<TransactionAggregate> {
     @Autowired
-    protected List<TransactionSpecification<Transaction>> transactionTransactionSpecifications;
+    protected List<TransactionSpecification<TransactionAggregate>> transactionTransactionSpecifications;
 
     @PostConstruct
     public void initSpecifications() {
@@ -30,7 +30,7 @@ public class TransactionValidator implements AbstractTransactionValidator<Transa
     }
 
     @Override
-    public void validate(Transaction transaction) {
+    public void validate(TransactionAggregate transaction) {
         transactionTransactionSpecifications.forEach(
             transactionSpecification -> {
                 if (!transactionSpecification.isSatisfiedBy(transaction)) {
@@ -43,7 +43,7 @@ public class TransactionValidator implements AbstractTransactionValidator<Transa
         );
     }
 
-    ValidationMessageStrategy getValidationMessageStrategy(TransactionSpecification<Transaction> transactionSpecification) {
+    ValidationMessageStrategy getValidationMessageStrategy(TransactionSpecification<TransactionAggregate> transactionSpecification) {
         return switch (transactionSpecification.getClass().getSimpleName()) {
             case "SenderAndReceiverAreNotTheSame" -> new SenderAndReceiverAreTheSame();
             case "TransactionIsNotProcessing" -> new TransactionIsNotProcessing();

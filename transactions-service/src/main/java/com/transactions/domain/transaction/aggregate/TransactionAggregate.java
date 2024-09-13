@@ -1,21 +1,31 @@
 package com.transactions.domain.transaction.aggregate;
 
+import com.transactions.domain.transaction.validators.TransactionValidator;
 import com.transactions.domain.transaction.value_objects.TransactionStatus;
 import com.transactions.domain.wallet.aggregate.WalletAggregate;
+import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@AllArgsConstructor
 public class TransactionAggregate {
-    private UUID id;
-    private WalletAggregate senderWallet;
-    private WalletAggregate receiverWallet;
-    private Double amount;
-    private TransactionStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    public UUID id;
+    public WalletAggregate senderWallet;
+    public WalletAggregate receiverWallet;
+    public Double amount;
+    public TransactionStatus status;
+    public LocalDateTime createdAt;
+    public LocalDateTime updatedAt;
+
+    @PostConstruct
+    public void validateTransaction() {
+        TransactionValidator transactionValidator = new TransactionValidator();
+        transactionValidator.validate(this);
+    }
 
     public void processTransaction(WalletAggregate senderWallet, WalletAggregate receiverWallet) {
         senderWallet.debit(amount);
@@ -34,14 +44,14 @@ public class TransactionAggregate {
             WalletAggregate receiverWallet,
             Double amount
     ) {
-        TransactionAggregate transaction = new TransactionAggregate();
-        transaction.id = UUID.randomUUID();
-        transaction.senderWallet = senderWallet;
-        transaction.receiverWallet = receiverWallet;
-        transaction.amount = amount;
-        transaction.status = TransactionStatus.PROCESSING;
-        transaction.createdAt = LocalDateTime.now();
-        transaction.updatedAt = LocalDateTime.now();
-        return transaction;
+        return new TransactionAggregate(
+            UUID.randomUUID(),
+            senderWallet,
+            receiverWallet,
+            amount,
+            TransactionStatus.PROCESSING,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
     }
 }

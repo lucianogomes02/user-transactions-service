@@ -1,12 +1,12 @@
 package com.transactions.services;
 
-import com.transactions.domain.wallet.entities.Wallet;
 import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
 import com.transactions.domain.transaction.value_objects.TransactionStatus;
+import com.transactions.domain.wallet.entities.Wallet;
+import com.transactions.domain.wallet.validators.WalletValidator;
 import com.transactions.domain.wallet.value_objects.WalletPublicDto;
 import com.transactions.domain.wallet.value_objects.WalletRecordDto;
 import com.transactions.repositories.WalletRepository;
-import com.transactions.services.validators.wallet.WalletValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
