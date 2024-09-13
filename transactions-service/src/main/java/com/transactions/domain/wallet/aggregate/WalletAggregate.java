@@ -23,7 +23,7 @@ public class WalletAggregate {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static WalletAggregate createWallet(String userId, Double initialBalance) {
+    public static WalletAggregate registerWallet(String userId, Double initialBalance) {
         WalletAggregate wallet = new WalletAggregate();
         wallet.id = UUID.randomUUID();
         wallet.userId = userId;
