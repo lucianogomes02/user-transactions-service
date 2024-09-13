@@ -25,6 +25,7 @@ public class WalletAggregate {
 
     public static WalletAggregate createWallet(String userId, Double initialBalance) {
         WalletAggregate wallet = new WalletAggregate();
+        wallet.id = UUID.randomUUID();
         wallet.userId = userId;
         wallet.balance = initialBalance;
         wallet.createdAt = LocalDateTime.now();

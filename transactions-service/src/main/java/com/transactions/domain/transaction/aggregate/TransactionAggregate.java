@@ -10,8 +10,8 @@ import java.util.UUID;
 @Getter
 public class TransactionAggregate {
     private UUID id;
-    private String senderId;
-    private String receiverId;
+    private WalletAggregate senderWallet;
+    private WalletAggregate receiverWallet;
     private Double amount;
     private TransactionStatus status;
     private LocalDateTime createdAt;
@@ -29,10 +29,15 @@ public class TransactionAggregate {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static TransactionAggregate initiateTransaction(String senderId, String receiverId, Double amount) {
+    public static TransactionAggregate initiateTransaction(
+            WalletAggregate senderWallet,
+            WalletAggregate receiverWallet,
+            Double amount
+    ) {
         TransactionAggregate transaction = new TransactionAggregate();
-        transaction.senderId = senderId;
-        transaction.receiverId = receiverId;
+        transaction.id = UUID.randomUUID();
+        transaction.senderWallet = senderWallet;
+        transaction.receiverWallet = receiverWallet;
         transaction.amount = amount;
         transaction.status = TransactionStatus.PROCESSING;
         transaction.createdAt = LocalDateTime.now();
