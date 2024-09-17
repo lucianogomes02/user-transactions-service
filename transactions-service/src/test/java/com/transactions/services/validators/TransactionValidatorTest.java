@@ -10,7 +10,7 @@
 //import org.junit.jupiter.api.Test;
 //import org.mockito.MockitoAnnotations;
 //import org.powermock.core.classloader.annotations.PrepareForTest;
-//import com.transactions.domain.transaction.entities.Transaction;
+//import com.transactions.repositories.orm.Transaction;
 //import com.transactions.domain.transaction.specifications.TransactionSpecification;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mock;

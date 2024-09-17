@@ -1,7 +1,7 @@
 package com.transactions.application.transaction.controllers;
 
-import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
-import com.transactions.domain.transaction.value_objects.TransactionRecordDto;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionPublicDto;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionRecordDto;
 import com.transactions.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

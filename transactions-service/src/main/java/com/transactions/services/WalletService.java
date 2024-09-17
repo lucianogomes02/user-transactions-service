@@ -1,73 +1,71 @@
 package com.transactions.services;
 
-import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
-import com.transactions.domain.transaction.value_objects.TransactionStatus;
-import com.transactions.domain.wallet.entities.Wallet;
-import com.transactions.domain.wallet.validators.WalletValidator;
-import com.transactions.domain.wallet.value_objects.WalletPublicDto;
-import com.transactions.domain.wallet.value_objects.WalletRecordDto;
-import com.transactions.repositories.WalletRepository;
+import com.transactions.domain.transactions.aggregate.WalletsTransaction;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionPublicDto;
+import com.transactions.domain.transactions.value_objects.wallet.WalletPublicDto;
+import com.transactions.domain.transactions.value_objects.wallet.WalletRecordDto;
+import com.transactions.repositories.transaction.TransactionDomainRepository;
+import com.transactions.repositories.wallet.WalletDomainRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class WalletService {
     @Autowired
-    private WalletRepository walletRepository;
+    private WalletDomainRepository walletDomainRepository;
 
     @Autowired
-    private WalletValidator walletValidator;
-
-    @Autowired
-    TransactionService transactionService;
+    private TransactionDomainRepository transactionDomainRepository;
 
     @Transactional
     public WalletPublicDto createWallet(WalletRecordDto walletRecordDto, String currentUserId) {
-        var wallet = new Wallet();
-        wallet.setUserId(currentUserId);
-        wallet.setBalance(Double.valueOf(walletRecordDto.balance()));
-        wallet.setCreatedAt(LocalDateTime.now());
-        wallet.setUpdatedAt(LocalDateTime.now());
-        wallet = walletRepository.save(wallet);
+        var wallet = WalletsTransaction.registerWallet(
+            currentUserId,
+            Double.parseDouble(walletRecordDto.balance())
+        );
         return new WalletPublicDto(
-            wallet.getId().toString(),
-            wallet.getUserId().toString(),
-            wallet.getBalance().toString(),
-            wallet.getCreatedAt().toString()
+            wallet.id.toString(),
+            wallet.userId,
+            wallet.balance.toString(),
+            wallet.createdAt.toString()
         );
     }
 
     @Transactional
     public void updateUserWalletBalance(TransactionPublicDto transactionPublicDto) {
+        WalletsTransaction walletsTransaction = transactionDomainRepository.findWalletTransactionById(
+            UUID.fromString(transactionPublicDto.id())
+        );
         try {
-            var senderWallet = walletRepository.findByUserId(transactionPublicDto.senderId());
-            var receiverWallet = walletRepository.findByUserId(transactionPublicDto.receiverId());
-            walletValidator.validate(senderWallet, receiverWallet, Double.parseDouble(transactionPublicDto.amount()));
-
-            var receiverNewBalance = receiverWallet.getBalance() + Double.parseDouble(transactionPublicDto.amount());
-            var senderNewBalance = senderWallet.getBalance() - Double.parseDouble(transactionPublicDto.amount());
-            senderWallet.setBalance(senderNewBalance);
-            senderWallet.setUpdatedAt(LocalDateTime.now());
-            receiverWallet.setBalance(receiverNewBalance);
-            receiverWallet.setUpdatedAt(LocalDateTime.now());
-            walletRepository.save(senderWallet);
-            walletRepository.save(receiverWallet);
-            transactionService.updateTransactionStatus(TransactionStatus.SUCCEEDED, transactionPublicDto.id());
+            walletsTransaction.processTransaction();
+            walletDomainRepository.updateWalletBalance(
+                walletsTransaction.senderWallet.id,
+                walletsTransaction.senderWallet.balance
+            );
+            walletDomainRepository.updateWalletBalance(
+                walletsTransaction.receiverWallet.id,
+                walletsTransaction.receiverWallet.balance
+            );
         } catch (Exception e) {
-            transactionService.updateTransactionStatus(TransactionStatus.FAILED, transactionPublicDto.id());
+            walletsTransaction.registerFailedTransaction();
+        } finally {
+            transactionDomainRepository.updateTransactionStatus(
+                walletsTransaction.transaction.id,
+                walletsTransaction.transaction.status
+            );
         }
     }
 
     public WalletPublicDto getWallet(String currentUserId) {
-        var wallet = walletRepository.findByUserId(currentUserId);
+        var wallet = walletDomainRepository.findByUserId(currentUserId);
         return new WalletPublicDto(
-            wallet.getId().toString(),
-            wallet.getUserId(),
-            wallet.getBalance().toString(),
-            wallet.getCreatedAt().toString()
+            wallet.id.toString(),
+            wallet.userId,
+            wallet.balance.toString(),
+            wallet.createdAt.toString()
         );
     }
 }

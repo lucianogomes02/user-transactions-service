@@ -1,6 +1,6 @@
 package com.transactions.services.producers;
 
-import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionPublicDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

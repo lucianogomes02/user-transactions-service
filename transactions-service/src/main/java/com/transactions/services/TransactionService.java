@@ -1,68 +1,57 @@
 package com.transactions.services;
 
-import com.transactions.domain.transaction.entities.Transaction;
-import com.transactions.domain.transaction.validators.TransactionValidator;
-import com.transactions.domain.transaction.value_objects.TransactionPublicDto;
-import com.transactions.domain.transaction.value_objects.TransactionRecordDto;
-import com.transactions.domain.transaction.value_objects.TransactionStatus;
-import com.transactions.repositories.TransactionRepository;
+import com.transactions.domain.transactions.aggregate.WalletsTransaction;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionPublicDto;
+import com.transactions.domain.transactions.value_objects.transactions.TransactionRecordDto;
+import com.transactions.repositories.transaction.TransactionDomainRepository;
 import com.transactions.services.producers.TransactionProducer;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionDomainRepository transactionDomainRepository;
 
     @Autowired
     private TransactionProducer transactionProducer;
 
-    @Autowired
-    private TransactionValidator transactionValidator;
-
     @Transactional
     public TransactionPublicDto createTransaction(TransactionRecordDto transactionRecordDto, String currentUserId) {
-        var transaction = new Transaction();
-        transaction.setSenderId(currentUserId);
-        transaction.setReceiverId(transactionRecordDto.receiverId());
-        transaction.setAmount(Double.valueOf(transactionRecordDto.amount()));
-        transactionValidator.validate(transaction);
+        WalletsTransaction walletsTransaction = new WalletsTransaction();
+        walletsTransaction.transaction = walletsTransaction.initiateTransaction(
+            currentUserId,
+            transactionRecordDto.receiverId(),
+            Double.valueOf(transactionRecordDto.amount())
+        );
 
-        transaction = transactionRepository.save(transaction);
+        transactionDomainRepository.save(walletsTransaction);
+
         var transactionDto = new TransactionPublicDto(
-            transaction.getId().toString(),
-            transaction.getSenderId(),
-            transaction.getReceiverId(),
-            transaction.getAmount().toString(),
-            transaction.getStatus().toString(),
-            transaction.getCreatedAt().toString()
+            walletsTransaction.transaction.id.toString(),
+            walletsTransaction.transaction.senderId,
+            walletsTransaction.transaction.receiverId,
+            walletsTransaction.transaction.amount.toString(),
+            walletsTransaction.transaction.status.toString(),
+            walletsTransaction.transaction.createdAt.toString()
         );
         transactionProducer.publishTransactionMessage(transactionDto);
         return transactionDto;
     }
 
-    @Transactional
-    public void updateTransactionStatus(TransactionStatus transactionStatus, String transactionId) {
-        var transaction = transactionRepository.findById(UUID.fromString(transactionId)).orElseThrow();
-        transaction.setStatus(transactionStatus);
-        transactionRepository.save(transaction);
-    }
-
     public List<TransactionPublicDto> getTransactions() {
-        return transactionRepository.findAll().stream()
+        return transactionDomainRepository.findAll().stream()
             .map(transaction -> new TransactionPublicDto(
-                transaction.getId().toString(),
-                transaction.getSenderId(),
-                transaction.getReceiverId(),
-                transaction.getAmount().toString(),
-                transaction.getStatus().toString(),
-                transaction.getCreatedAt().toString()
+                transaction.id.toString(),
+                transaction.senderId,
+                transaction.receiverId,
+                transaction.amount.toString(),
+                transaction.createdAt.toString(),
+                transaction.updatedAt.toString()
             ))
             .collect(Collectors.toList());
     }
