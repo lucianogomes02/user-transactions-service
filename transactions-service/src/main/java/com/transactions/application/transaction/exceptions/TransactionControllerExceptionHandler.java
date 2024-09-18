@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.transactions.application.transaction.controllers")
 public class TransactionControllerExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)

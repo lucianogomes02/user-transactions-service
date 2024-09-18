@@ -5,11 +5,9 @@ import com.transactions.domain.transactions.entities.Wallet;
 import com.transactions.domain.transactions.validators.transactions.TransactionValidator;
 import com.transactions.domain.transactions.validators.wallet.WalletValidator;
 import com.transactions.domain.transactions.value_objects.transactions.TransactionStatus;
-import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @NoArgsConstructor
 public class WalletsTransaction {
@@ -18,8 +16,8 @@ public class WalletsTransaction {
     public Wallet receiverWallet;
     public Double amount;
 
-    private WalletValidator walletValidator;
-    private TransactionValidator transactionValidator;
+    private final TransactionValidator transactionValidator = new TransactionValidator();
+    private final WalletValidator walletValidator = new WalletValidator();
 
     public WalletsTransaction(
         Transaction transaction,
@@ -33,21 +31,15 @@ public class WalletsTransaction {
         this.amount = amount;
     }
 
-    @PostConstruct
-    public void initValidators() {
-        this.transactionValidator = new TransactionValidator();
-        this.walletValidator = new WalletValidator();
-    }
-
     public void processTransaction() {
-        this.processTransactionBetweenWallets();
-        this.transaction.status = TransactionStatus.SUCCEEDED;
-        this.transaction.updatedAt = LocalDateTime.now();
+        processTransactionBetweenWallets();
+        transaction.status = TransactionStatus.SUCCEEDED;
+        transaction.updatedAt = LocalDateTime.now();
     }
 
     public void registerFailedTransaction() {
-        this.transaction.status = TransactionStatus.FAILED;
-        this.transaction.updatedAt = LocalDateTime.now();
+        transaction.status = TransactionStatus.FAILED;
+        transaction.updatedAt = LocalDateTime.now();
     }
 
     public Transaction initiateTransaction(
@@ -55,22 +47,19 @@ public class WalletsTransaction {
         String receiverId,
         Double amount
     ) {
-        Transaction transaction = new Transaction(
-            UUID.randomUUID(),
-            senderId,
-            receiverId,
-            amount,
-            TransactionStatus.PROCESSING,
-            LocalDateTime.now(),
-            LocalDateTime.now()
-        );
-        this.transactionValidator.validate(transaction);
+        Transaction transaction = new Transaction();
+        transaction.senderId = senderId;
+        transaction.receiverId = receiverId;
+        transaction.amount = amount;
+        transaction.status = TransactionStatus.PROCESSING;
+        transaction.createdAt = LocalDateTime.now();
+        transaction.updatedAt = LocalDateTime.now();
+        transactionValidator.validate(transaction);
         return transaction;
     }
 
     public static Wallet registerWallet(String userId, Double initialBalance) {
         Wallet wallet = new Wallet();
-        wallet.id = UUID.randomUUID();
         wallet.userId = userId;
         wallet.balance = initialBalance;
         wallet.createdAt = LocalDateTime.now();
@@ -79,9 +68,9 @@ public class WalletsTransaction {
     }
 
     private void processTransactionBetweenWallets() {
-        this.walletValidator.validate(senderWallet, receiverWallet, amount);
-        this.debitFromSendersWallet(amount);
-        this.creditInReceiversWallet(amount);
+        walletValidator.validate(senderWallet, receiverWallet, amount);
+        debitFromSendersWallet(amount);
+        creditInReceiversWallet(amount);
     }
 
     private void debitFromSendersWallet(Double amount) {

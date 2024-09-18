@@ -26,6 +26,7 @@ public class WalletService {
             currentUserId,
             Double.parseDouble(walletRecordDto.balance())
         );
+        walletDomainRepository.save(wallet);
         return new WalletPublicDto(
             wallet.id.toString(),
             wallet.userId,

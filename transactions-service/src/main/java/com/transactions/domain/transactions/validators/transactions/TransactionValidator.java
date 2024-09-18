@@ -11,16 +11,14 @@ import com.transactions.domain.transactions.strategies.transactions.TransactionA
 import com.transactions.domain.transactions.strategies.transactions.TransactionIsNotProcessing;
 import com.transactions.libs.ValidationMessageStrategy;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Component
 public class TransactionValidator implements AbstractTransactionValidator<Transaction> {
-    @Autowired
-    protected List<TransactionSpecification<Transaction>> transactionTransactionSpecifications;
+
+    private final List<TransactionSpecification<Transaction>> transactionTransactionSpecifications = new ArrayList<>();
 
     @PostConstruct
     public void initSpecifications() {

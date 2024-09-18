@@ -36,7 +36,7 @@ public class TransactionDomainRepository {
     }
 
     public WalletsTransaction findWalletTransactionById(UUID id) {
-        Transaction transaction = findById(id);
+        Transaction transaction = findTransactionById(id);
         if (transaction == null) {
             return null;
         }
@@ -56,7 +56,7 @@ public class TransactionDomainRepository {
         );
     }
 
-    private Transaction findById(UUID id) {
+    private Transaction findTransactionById(UUID id) {
         TransactionTable transaction = transactionJpaRepository.findById(id).orElse(null);
         if (transaction == null) {
             return null;
@@ -72,17 +72,16 @@ public class TransactionDomainRepository {
         );
     }
 
-    public void save(WalletsTransaction walletsTransaction) {
-        TransactionTable transactionTable = new TransactionTable(
-            walletsTransaction.transaction.id,
-            walletsTransaction.transaction.senderId,
-            walletsTransaction.transaction.receiverId,
-            walletsTransaction.transaction.amount,
-            walletsTransaction.transaction.status,
-            walletsTransaction.transaction.createdAt,
-            walletsTransaction.transaction.updatedAt
-        );
+    public TransactionTable save(WalletsTransaction walletsTransaction) {
+        TransactionTable transactionTable = new TransactionTable();
+        transactionTable.setSenderId(walletsTransaction.transaction.senderId);
+        transactionTable.setReceiverId(walletsTransaction.transaction.receiverId);
+        transactionTable.setAmount(walletsTransaction.transaction.amount);
+        transactionTable.setStatus(walletsTransaction.transaction.status);
+        transactionTable.setCreatedAt(walletsTransaction.transaction.createdAt);
+        transactionTable.setUpdatedAt(walletsTransaction.transaction.updatedAt);
         transactionJpaRepository.save(transactionTable);
+        return transactionTable;
     }
 
     public void updateTransactionStatus(UUID transactionId, TransactionStatus status) {

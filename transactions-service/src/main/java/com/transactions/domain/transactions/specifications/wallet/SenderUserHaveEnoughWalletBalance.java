@@ -12,6 +12,6 @@ public class SenderUserHaveEnoughWalletBalance implements WalletSpecification<Wa
 
     @Override
     public boolean isSatisfiedBy(Wallet wallet, Double amount) {
-        return wallet.getBalance() >= amount;
+        return wallet.balance >= amount;
     }
 }

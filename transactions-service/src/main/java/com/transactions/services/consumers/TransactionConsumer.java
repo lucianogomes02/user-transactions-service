@@ -13,7 +13,7 @@ public class TransactionConsumer {
     private WalletService walletService;
 
     @RabbitListener(queues = "${broker.queue.transaction.name}")
-    public void listenUserQueue(@Payload TransactionPublicDto message) {
+    public void listenTransactionQueue(@Payload TransactionPublicDto message) {
         walletService.updateUserWalletBalance(message);
     }
 }

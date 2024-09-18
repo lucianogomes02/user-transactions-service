@@ -29,7 +29,8 @@ public class TransactionService {
             Double.valueOf(transactionRecordDto.amount())
         );
 
-        transactionDomainRepository.save(walletsTransaction);
+        var transaction = transactionDomainRepository.save(walletsTransaction);
+        walletsTransaction.transaction.id = transaction.getId();
 
         var transactionDto = new TransactionPublicDto(
             walletsTransaction.transaction.id.toString(),
@@ -50,8 +51,8 @@ public class TransactionService {
                 transaction.senderId,
                 transaction.receiverId,
                 transaction.amount.toString(),
-                transaction.createdAt.toString(),
-                transaction.updatedAt.toString()
+                transaction.status.toString(),
+                transaction.createdAt.toString()
             ))
             .collect(Collectors.toList());
     }
